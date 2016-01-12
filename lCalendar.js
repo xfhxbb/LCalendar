@@ -12,6 +12,8 @@
 var hlCalendar = {
         params: {
             minY: 1900, //
+            minM:1,
+            minD:1,
             maxY: 2099,
             maxM: 12,
             maxD: 31
@@ -63,13 +65,14 @@ function editDate(e) {
         var minDate = paramsArr[0]; //第一个值为最小日期
         var minArr = minDate.split('-');
         hlCalendar.params.minY = ~~minArr[0];
+        hlCalendar.params.minM = ~~minArr[1]; //最小月
+        hlCalendar.params.minD = ~~minArr[2]; //最小日
         var maxDate = paramsArr[1]; //第二个值为最大日期
         var maxArr = maxDate.split('-');
         hlCalendar.params.maxY = ~~maxArr[0];
         passY = hlCalendar.params.maxY - hlCalendar.params.minY + 1;
         hlCalendar.params.maxM = ~~maxArr[1]; //最大月
         hlCalendar.params.maxD = ~~maxArr[2]; //最大日
-        //var minD=~~minArr[2];
     }
     dateCtrlInit();
     if (!hlCalendar.gearDate.style.display || hlCalendar.gearDate.style.display == "none") {
@@ -131,16 +134,25 @@ function setDateGear() {
         itemStr = "";
         //得到月份的值
         var mmVal = parseInt(date_mm.getAttribute("val"));
-        //p 当前节点前后需要展示的节点个数
         var maxM = 12;
-        //假如存在最小值则替换默认
-        if (hlCalendar.params.maxY == hlCalendar.params.minY + yyVal) {
+        var minM=1;
+        var isM=false;
+        //当年份到达最大值
+        if (yyVal == passY-1) {
             maxM = hlCalendar.params.maxM;
+            isM=true;   
+        }
+        //当年份到达最小值
+        else if(yyVal == 0) {       
+            minM = hlCalendar.params.minM;
+            isM=true;
+         }
+         if(isM){
             var top = Math.floor(parseFloat(date_mm.style.top));
             if (!isNaN(top)) {
                 top % 2 == 0 ? (top = top) : (top = top + 1);
                 top > 8 && (top = 8);
-                var minTop = 8 - (maxM - 1) * 2;
+                var minTop = 8 - (maxM-minM) * 2;
                 top < minTop && (top = minTop);
                 date_mm.style.top = top + 'em';
                 mmVal = Math.abs(top - 8) / 2;
@@ -148,11 +160,13 @@ function setDateGear() {
             } else {
                 date_mm.style.top = 8 - (maxM - 1) * 2 + 'em';
             }
-        } else {
+         }
+         else {
             date_mm.style.top = 8 - mmVal * 2 + 'em';
         }
-        for (var p = 0; p < maxM; p++) {
-            itemStr += "<div class='tooth'>" + (1 + p) + "</div>";
+        //p 当前节点前后需要展示的节点个数
+        for (var p = 0; p < (maxM-minM+1); p++) {
+            itemStr += "<div class='tooth'>" + (minM + p) + "</div>";
         }
         date_mm.innerHTML = itemStr;
     } else {
@@ -167,16 +181,24 @@ function setDateGear() {
         var maxMonthDays = calcDays(yyVal, mmVal);
         //p 当前节点前后需要展示的节点个数
         var maxD = maxMonthDays;
-        //假如存在最小值则替换默认
-        if (hlCalendar.params.maxY == hlCalendar.params.minY + yyVal && hlCalendar.params.maxM == mmVal + 1) {
+        var minD=1;
+        var isM=false;
+        //当年份月份到达最大值
+        if (yyVal == passY-1&&hlCalendar.params.maxM == mmVal + 1) {
             maxD = hlCalendar.params.maxD;
+            isM=true;
         }
-        if (maxD <= maxMonthDays) {
+        //当年份月份到达最小值
+        else if(yyVal == 0&&mmVal==0) {       
+            minD = hlCalendar.params.minD;
+            isM=true;
+         }
+        if (isM) {
             var top = Math.floor(parseFloat(date_dd.style.top));
             if (!isNaN(top)) {
                 top % 2 == 0 ? (top = top) : (top = top + 1);
                 top > 8 && (top = 8);
-                var minTop = 8 - (maxD - 1) * 2;
+                var minTop = 8 - (maxD - minD) * 2;
                 top < minTop && (top = minTop);
                 date_dd.style.top = top + 'em';
                 ddVal = Math.abs(top - 8) / 2;
@@ -187,8 +209,8 @@ function setDateGear() {
         } else {
             date_dd.style.top = 8 - ddVal * 2 + 'em';
         }
-        for (var p = 0; p < maxD; p++) {
-            itemStr += "<div class='tooth'>" + (1 + p) + "</div>";
+        for (var p = 0; p < (maxD-minD+1); p++) {
+            itemStr += "<div class='tooth'>" + (minD + p) + "</div>";
         }
         date_dd.innerHTML = itemStr;
     } else {
@@ -530,7 +552,6 @@ function setGear(target, f) {
             top < minTop && (top = minTop);
             target.style.top = top + 'em';
             j = Math.abs(top - 8) / 2;
-            //j = (j + 12) % 12;
             break;
         case "date_dd":
             var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
