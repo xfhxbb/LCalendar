@@ -143,7 +143,7 @@ function setDateGear() {
             isM=true;   
         }
         //当年份到达最小值
-        else if(yyVal == 0) {       
+        if(yyVal == 0) {       
             minM = hlCalendar.params.minM;
             isM=true;
          }
@@ -189,7 +189,7 @@ function setDateGear() {
             isM=true;
         }
         //当年份月份到达最小值
-        else if(yyVal == 0&&mmVal==0) {       
+        if(yyVal == 0&&mmVal==0) {       
             minD = hlCalendar.params.minD;
             isM=true;
          }
