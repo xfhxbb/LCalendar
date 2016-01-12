@@ -12,14 +12,14 @@
 var hlCalendar = {
         params: {
             minY: 1900, //
-            minM:1,
-            minD:1,
+            minM: 1,
+            minD: 1,
             maxY: 2099,
             maxM: 12,
             maxD: 31
         }
     }
-//初始化默认年段
+    //初始化默认年段
 var passY = hlCalendar.params.maxY - hlCalendar.params.minY + 1;
 //呼出日期插件
 function editDate(e) {
@@ -135,37 +135,30 @@ function setDateGear() {
         //得到月份的值
         var mmVal = parseInt(date_mm.getAttribute("val"));
         var maxM = 12;
-        minM=1;
-        var isM=false;
+        minM = 1;
         //当年份到达最大值
-        if (yyVal == passY-1) {
+        if (yyVal == passY - 1) {
             maxM = hlCalendar.params.maxM;
-            isM=true;   
         }
         //当年份到达最小值
-        if(yyVal == 0) {       
+        if (yyVal == 0) {
             minM = hlCalendar.params.minM;
-            isM=true;
-         }
-         if(isM){
-            var top = Math.floor(parseFloat(date_mm.style.top));
-            if (!isNaN(top)) {
-                top % 2 == 0 ? (top = top) : (top = top + 1);
-                top > 8 && (top = 8);
-                var minTop = 8 - (maxM-minM) * 2;
-                top < minTop && (top = minTop);
-                date_mm.style.top = top + 'em';
-                mmVal = Math.abs(top - 8) / 2;
-                date_mm.setAttribute("val", mmVal);
-            } else {
-                date_mm.style.top = 8 - (maxM - 1) * 2 + 'em';
-            }
-         }
-         else {
+        }
+        //没滑动过
+        var top = Math.floor(parseFloat(date_mm.style.top));
+        if (!isNaN(top)) {
+            top % 2 == 0 ? (top = top) : (top = top + 1);
+            top > 8 && (top = 8);
+            var minTop = 8 - (maxM - minM) * 2;
+            top < minTop && (top = minTop);
+            date_mm.style.top = top + 'em';
+            mmVal = Math.abs(top - 8) / 2;
+            date_mm.setAttribute("val", mmVal);
+        } else {
             date_mm.style.top = 8 - mmVal * 2 + 'em';
         }
         //p 当前节点前后需要展示的节点个数
-        for (var p = 0; p < (maxM-minM+1); p++) {
+        for (var p = 0; p < (maxM - minM + 1); p++) {
             itemStr += "<div class='tooth'>" + (minM + p) + "</div>";
         }
         date_mm.innerHTML = itemStr;
@@ -181,35 +174,29 @@ function setDateGear() {
         var maxMonthDays = calcDays(yyVal, mmVal);
         //p 当前节点前后需要展示的节点个数
         var maxD = maxMonthDays;
-        minD=1;
-        var isM=false;
+        minD = 1;
         //当年份月份到达最大值
-        if (yyVal == passY-1&&hlCalendar.params.maxM == mmVal + 1) {
+        if (yyVal == passY - 1 && hlCalendar.params.maxM == mmVal + 1) {
             maxD = hlCalendar.params.maxD;
-            isM=true;
         }
         //当年份月份到达最小值
-        if(yyVal == 0&&mmVal==0) {       
+        if (yyVal == 0 && mmVal == 0) {
             minD = hlCalendar.params.minD;
-            isM=true;
-         }
-        if (isM) {
-            var top = Math.floor(parseFloat(date_dd.style.top));
-            if (!isNaN(top)) {
-                top % 2 == 0 ? (top = top) : (top = top + 1);
-                top > 8 && (top = 8);
-                var minTop = 8 - (maxD - minD) * 2;
-                top < minTop && (top = minTop);
-                date_dd.style.top = top + 'em';
-                ddVal = Math.abs(top - 8) / 2;
-                date_dd.setAttribute("val", ddVal);
-            } else {
-                date_dd.style.top = 8 - ddVal * 2 + 'em';
-            }
+        }
+        var top = Math.floor(parseFloat(date_dd.style.top));
+        //没滑动过
+        if (!isNaN(top)) {
+            top % 2 == 0 ? (top = top) : (top = top + 1);
+            top > 8 && (top = 8);
+            var minTop = 8 - (maxD - minD) * 2;
+            top < minTop && (top = minTop);
+            date_dd.style.top = top + 'em';
+            ddVal = Math.abs(top - 8) / 2;
+            date_dd.setAttribute("val", ddVal);
         } else {
             date_dd.style.top = 8 - ddVal * 2 + 'em';
         }
-        for (var p = 0; p < (maxD-minD+1); p++) {
+        for (var p = 0; p < (maxD - minD + 1); p++) {
             itemStr += "<div class='tooth'>" + (minD + p) + "</div>";
         }
         date_dd.innerHTML = itemStr;
@@ -239,6 +226,7 @@ function cancelDateEdit() {
     hlCalendar.gearDate.style.display = "none";
     //body.removeChild(hlCalendar.gearDate);
 }
+
 function cancelTimeEdit() {
     hlCalendar.gearTime.style.display = "none";
     //body.removeChild(hlCalendar.gearDate);
@@ -247,10 +235,10 @@ function cancelTimeEdit() {
 function finishDateEdit() {
     //hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"))+minM-1;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM - 1;
     date_mm = date_mm % 12 + 1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"))+minD-1;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD - 1;
     date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
     hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
@@ -344,7 +332,7 @@ function dateTimeCtrlInit(calendar) {
         dateArr.dd = rs[2].replace(/-/g, "") - 1;
         dateArr.hh = parseInt(rs[3].replace(/\s0?/g, ""));
         dateArr.mi = parseInt(rs[4].replace(/:0?/g, ""))
-    }else {
+    } else {
         dateArr.yy = dateArr.yy + 1900 - hlCalendar.params.minY;
     }
     calendar.querySelector(".date_yy").setAttribute("val", dateArr.yy);
@@ -359,10 +347,10 @@ function dateTimeCtrlInit(calendar) {
 function finishDatetimeEdit() {
     hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"))+minM-1;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM - 1;
     date_mm = date_mm % 12 + 1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"))+minD-1;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD - 1;
     date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
 
@@ -384,7 +372,7 @@ function editTime(e) {
             '<div class="date_btn" onclick="finishTimeEdit();">确定</div>' +
             '</div>' +
             '<div class="date_roll_mask">' +
-            '<div class="time_roll">' +        
+            '<div class="time_roll">' +
             '<div>' +
             '<div class="gear time_hh" data-datetype="time_hh" ontouchstart="gearTouchStart(event)" ontouchmove="gearTouchMove(event)" ontouchend="gearTouchEnd(event)" onmousewheel="gearScroll(event)"></div>' +
             '<div class="date_grid" onmousewheel="gearScroll(event)">' +
@@ -452,6 +440,7 @@ function setTimeGear(calendar) {
         return
     }
 }
+
 function finishTimeEdit() {
     hlCalendar.gearTime.style.display = "none";
     var time_hh = hlCalendar.gearTime.querySelector(".time_hh").getAttribute("val");
