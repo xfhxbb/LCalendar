@@ -19,7 +19,7 @@ var hlCalendar = {
             maxD: 31
         }
     }
-    //初始化默认年段
+//初始化默认年段
 var passY = hlCalendar.params.maxY - hlCalendar.params.minY + 1;
 //呼出日期插件
 function editDate(e) {
@@ -135,7 +135,7 @@ function setDateGear() {
         //得到月份的值
         var mmVal = parseInt(date_mm.getAttribute("val"));
         var maxM = 12;
-        var minM=1;
+        minM=1;
         var isM=false;
         //当年份到达最大值
         if (yyVal == passY-1) {
@@ -181,7 +181,7 @@ function setDateGear() {
         var maxMonthDays = calcDays(yyVal, mmVal);
         //p 当前节点前后需要展示的节点个数
         var maxD = maxMonthDays;
-        var minD=1;
+        minD=1;
         var isM=false;
         //当年份月份到达最大值
         if (yyVal == passY-1&&hlCalendar.params.maxM == mmVal + 1) {
@@ -247,10 +247,10 @@ function cancelTimeEdit() {
 function finishDateEdit() {
     //hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"));
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"))+minM-1;
     date_mm = date_mm % 12 + 1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"));
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"))+minD-1;
     date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
     hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
@@ -312,13 +312,14 @@ function editDatetime(e) {
         var minDate = paramsArr[0]; //第一个值为最小日期
         var minArr = minDate.split('-');
         hlCalendar.params.minY = ~~minArr[0];
+        hlCalendar.params.minM = ~~minArr[1]; //最小月
+        hlCalendar.params.minD = ~~minArr[2]; //最小日
         var maxDate = paramsArr[1]; //第二个值为最大日期
         var maxArr = maxDate.split('-');
         hlCalendar.params.maxY = ~~maxArr[0];
         passY = hlCalendar.params.maxY - hlCalendar.params.minY + 1;
         hlCalendar.params.maxM = ~~maxArr[1]; //最大月
         hlCalendar.params.maxD = ~~maxArr[2]; //最大日
-        //var minD=~~minArr[2];
     }
     dateTimeCtrlInit(hlCalendar.gearDate);
     if (!hlCalendar.gearDate.style.display || hlCalendar.gearDate.style.display == "none") {
@@ -358,10 +359,10 @@ function dateTimeCtrlInit(calendar) {
 function finishDatetimeEdit() {
     hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"));
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"))+minM-1;
     date_mm = date_mm % 12 + 1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"));
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"))+minD-1;
     date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
 
@@ -529,11 +530,11 @@ function gearTouchEnd(e) {
     if (!self["pos_" + target.id]) {
         self["pos_" + target.id] = 0;
     }
-    setGear(target, 1);
+    setGear(target);
 }
 //控制插件滚动后停留的值
-function setGear(target, f) {
-    var j = parseFloat(target.getAttribute("val")) + f;
+function setGear(target) {
+    var j = parseFloat(target.getAttribute("val"));
     switch (target.dataset.datetype) {
         case "date_yy":
             var top = Math.floor(parseFloat(target.style.top));
