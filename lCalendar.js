@@ -222,26 +222,6 @@ function calcDays(year, month) {
     }
 }
 
-function cancelDateEdit() {
-    hlCalendar.gearDate.style.display = "none";
-    //body.removeChild(hlCalendar.gearDate);
-}
-
-function cancelTimeEdit() {
-    hlCalendar.gearTime.style.display = "none";
-    //body.removeChild(hlCalendar.gearDate);
-}
-
-function finishDateEdit() {
-    //hlCalendar.gearDate.style.display = "none";
-    var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
-    date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
-    date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
-    hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
-    cancelDateEdit();
-}
 //呼出日期+时间插件
 function editDatetime(e) {
     hlCalendar.listener = e.target;
@@ -314,7 +294,6 @@ function editDatetime(e) {
 }
 //初始化年月日时分插件默认值
 function dateTimeCtrlInit(calendar) {
-
     var date = new Date();
     var dateArr = {
         yy: date.getYear(),
@@ -342,29 +321,16 @@ function dateTimeCtrlInit(calendar) {
     setTimeGear(calendar);
 }
 
-function finishDatetimeEdit() {
-    hlCalendar.gearDate.style.display = "none";
-    var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
-    date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
-    date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
-
-    var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
-    var time_mm = hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val");
-
-    hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd + " " + (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
-}
 //呼出时间插件
 function editTime(e) {
     hlCalendar.listener = e.target;
-    hlCalendar.gearTime = document.querySelector(".gearTime");
-    if (!hlCalendar.gearTime) {
-        hlCalendar.gearTime = document.createElement("div");
-        hlCalendar.gearTime.className = "gearTime";
-        hlCalendar.gearTime.innerHTML = '<div class="time_ctrl slideInUp">' +
+    hlCalendar.gearDate = document.querySelector(".gearTime");
+    if (!hlCalendar.gearDate) {
+        hlCalendar.gearDate = document.createElement("div");
+        hlCalendar.gearDate.className = "gearDate";
+        hlCalendar.gearDate.innerHTML = '<div class="time_ctrl slideInUp">' +
             '<div class="date_btn_box">' +
-            '<div class="date_btn" onclick="cancelTimeEdit();">取消</div>' +
+            '<div class="date_btn" onclick="cancelDateEdit();">取消</div>' +
             '<div class="date_btn" onclick="finishTimeEdit();">确定</div>' +
             '</div>' +
             '<div class="date_roll_mask">' +
@@ -384,13 +350,13 @@ function editTime(e) {
             '</div>' + //time_roll
             '</div>' +
             '</div>';
-        document.body.appendChild(hlCalendar.gearTime);
+        document.body.appendChild(hlCalendar.gearDate);
     }
 
     //得到插件初始化参数集合
-    timeCtrlInit(hlCalendar.gearTime);
-    if (!hlCalendar.gearTime.style.display || hlCalendar.gearTime.style.display == "none") {
-        hlCalendar.gearTime.style.display = "block";
+    timeCtrlInit(hlCalendar.gearDate);
+    if (!hlCalendar.gearDate.style.display || hlCalendar.gearDate.style.display == "none") {
+        hlCalendar.gearDate.style.display = "block";
     }
 }
 //初始化时分插件默认值
@@ -436,12 +402,40 @@ function setTimeGear(calendar) {
         return
     }
 }
-
+//取消
+function cancelDateEdit() {
+    var evt = new CustomEvent('input');
+    hlCalendar.listener.dispatchEvent(evt);
+    document.body.removeChild(hlCalendar.gearDate);
+}
+//日期确认
+function finishDateEdit() {
+    var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
+    date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
+    date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
+    hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
+    cancelDateEdit();
+}
+//日期时间确认
+function finishDatetimeEdit() {
+    var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
+    date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
+    date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
+    var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
+    var time_mm = hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val");
+    hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd + " " + (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
+    cancelDateEdit();
+}
+//时间确认
 function finishTimeEdit() {
-    hlCalendar.gearTime.style.display = "none";
-    var time_hh = hlCalendar.gearTime.querySelector(".time_hh").getAttribute("val");
-    var time_mm = hlCalendar.gearTime.querySelector(".time_mm").getAttribute("val");
+    var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
+    var time_mm = hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val");
     hlCalendar.listener.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
+    cancelDateEdit();
 }
 //触摸开始
 function gearTouchStart(e) {
