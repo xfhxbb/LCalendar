@@ -235,11 +235,9 @@ function cancelTimeEdit() {
 function finishDateEdit() {
     //hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM - 1;
-    date_mm = date_mm % 12 + 1;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD - 1;
-    date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
     hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
     cancelDateEdit();
@@ -347,11 +345,9 @@ function dateTimeCtrlInit(calendar) {
 function finishDatetimeEdit() {
     hlCalendar.gearDate.style.display = "none";
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM - 1;
-    date_mm = date_mm % 12 + 1;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD - 1;
-    date_dd = date_dd % calcDays(date_yy, date_mm) + 1;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
 
     var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
