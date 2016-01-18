@@ -448,6 +448,7 @@ function gearTouchStart(e) {
             break
         }
     }
+    clearInterval(target["int_" + target.id]);
     target["old_" + target.id] = e.targetTouches[0].screenY;
     target["o_t_" + target.id] = (new Date()).getTime();
     if (target.style.top) {
