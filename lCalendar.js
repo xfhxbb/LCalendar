@@ -441,7 +441,6 @@ function finishTimeEdit() {
 function gearTouchStart(e) {
     e.preventDefault();
     var target = e.target;
-    var self = this;
     while (true) {
         if (!target.classList.contains("gear")) {
             target = target.parentElement
@@ -449,27 +448,26 @@ function gearTouchStart(e) {
             break
         }
     }
-    self["old_" + target.id] = e.targetTouches[0].screenY;
-    self["o_t_" + target.id] = (new Date()).getTime();
+    target["old_" + target.id] = e.targetTouches[0].screenY;
+    target["o_t_" + target.id] = (new Date()).getTime();
     if (target.style.top) {
         if (/em/.test(target.style.top)) {
-            self["o_d_" + target.id] = parseFloat(target.style.top.replace(/em/g, ""))
+            target["o_d_" + target.id] = parseFloat(target.style.top.replace(/em/g, ""))
         } else {
             if (/px/.test(target.style.top)) {
-                self["o_d_" + target.id] = parseFloat(target.style.top.replace(/px/g, "")) * 18 / target.clientHeight
+                target["o_d_" + target.id] = parseFloat(target.style.top.replace(/px/g, "")) * 18 / target.clientHeight
             } else {
-                self["o_d_" + target.id] = 0
+                target["o_d_" + target.id] = 0
             }
         }
     } else {
-        self["o_d_" + target.id] = 0
+        target["o_d_" + target.id] = 0
     }
 }
 //手指移动
 function gearTouchMove(e) {
     e.preventDefault();
     var target = e.target;
-    var self = this;
     while (true) {
         if (!target.classList.contains("gear")) {
             target = target.parentElement
@@ -477,18 +475,17 @@ function gearTouchMove(e) {
             break
         }
     }
-    self["new_" + target.id] = e.targetTouches[0].screenY;
-    self["n_t_" + target.id] = (new Date()).getTime();
-    //var f = (self["new_" + target.id] - self["old_" + target.id]) * 18 / target.clientHeight;
-    var f = (self["new_" + target.id] - self["old_" + target.id]) * 18 / 370;
-    self["pos_" + target.id] = self["o_d_" + target.id] + f;
-    target.style.top = self["pos_" + target.id] + "em";
+    target["new_" + target.id] = e.targetTouches[0].screenY;
+    target["n_t_" + target.id] = (new Date()).getTime();
+    //var f = (target["new_" + target.id] - target["old_" + target.id]) * 18 / target.clientHeight;
+    var f = (target["new_" + target.id] - target["old_" + target.id]) * 18 / 370;
+    target["pos_" + target.id] = target["o_d_" + target.id] + f;
+    target.style.top = target["pos_" + target.id] + "em";
 }
 //离开屏幕
 function gearTouchEnd(e) {
     e.preventDefault();
     var target = e.target;
-    var self = this;
     while (true) {
         if (!target.classList.contains("gear")) {
             target = target.parentElement;
@@ -496,42 +493,74 @@ function gearTouchEnd(e) {
             break;
         }
     }
-    var flag = (self["new_" + target.id] - self["old_" + target.id]) / (self["n_t_" + target.id] - self["o_t_" + target.id]);
+    var flag = (target["new_" + target.id] - target["old_" + target.id]) / (target["n_t_" + target.id] - target["o_t_" + target.id]);
     if (Math.abs(flag) <= 0.2) {
-        self["spd_" + target.id] = (flag < 0 ? -0.08 : 0.08);
+        target["spd_" + target.id] = (flag < 0 ? -0.08 : 0.08);
     } else {
         if (Math.abs(flag) <= 0.5) {
-            self["spd_" + target.id] = (flag < 0 ? -0.16 : 0.16);
+            target["spd_" + target.id] = (flag < 0 ? -0.16 : 0.16);
         } else {
-            self["spd_" + target.id] = flag / 2;
+            target["spd_" + target.id] = flag / 2;
         }
     }
-    if (!self["pos_" + target.id]) {
-        self["pos_" + target.id] = 0;
+    if (!target["pos_" + target.id]) {
+        target["pos_" + target.id] = 0;
     }
-    setGear(target);
+    rollGear(target);
+}
+//缓动效果
+function rollGear(target) {
+    var d = 0;
+    clearInterval(target["int_" + target.id]);
+    target["int_" + target.id] = setInterval(function() {
+        var pos = target["pos_" + target.id];
+        var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
+        pos += speed;
+        if (Math.abs(speed) > 0.05) {} else {
+            speed = 0.05;
+            var b = Math.round(pos / 2) * 2;
+            if (Math.abs(pos - b) < 0.02) {
+                setGear(target);
+                clearInterval(target["int_" + target.id]);
+                return
+            } else {
+                if (pos > b) {
+                    pos -= speed
+                } else {
+                    pos += speed
+                }
+            }
+        }
+        target.style.top = pos + "em";
+        target["pos_" + target.id] = pos;
+        setGear(target);
+        d++;
+    }, 30);
 }
 //控制插件滚动后停留的值
 function setGear(target) {
+    var pos = target["pos_" + target.id];
+    if (pos > 8) {
+        pos = 8;
+        clearInterval(target["int_" + target.id]);
+    };
     var j = parseFloat(target.getAttribute("val"));
     switch (target.dataset.datetype) {
         case "date_yy":
-            var top = Math.floor(parseFloat(target.style.top));
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
+
             var minTop = 8 - (passY - 1) * 2;
-            top < minTop && (top = minTop);
-            target.style.top = top + 'em';
-            j = Math.abs(top - 8) / 2;
+            if (pos < minTop) {
+                pos = minTop;
+                clearInterval(target["int_" + target.id]);
+            }
+            j = Math.abs(pos - 8) / 2;
             break;
         case "date_mm":
-            var top = Math.floor(parseFloat(target.style.top));
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = -14;
-            top < minTop && (top = minTop);
-            target.style.top = top + 'em';
-            j = Math.abs(top - 8) / 2;
+            if (pos < -14) {
+                pos = -14;
+                clearInterval(target["int_" + target.id]);
+            }
+            j = Math.abs(pos - 8) / 2;
             break;
         case "date_dd":
             var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
@@ -542,29 +571,26 @@ function setGear(target) {
             var mmVal = parseInt(date_mm.getAttribute("val"));
             //返回月份的天数
             var maxMonthDays = calcDays(yyVal, mmVal);
-            var top = Math.floor(parseFloat(target.style.top));
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
             var minTop = 8 - (maxMonthDays - 1) * 2;
-            top < minTop && (top = minTop);
-            target.style.top = top + 'em';
-            j = Math.abs(top - 8) / 2;
+            if (pos < minTop) {
+                pos = minTop;
+                clearInterval(target["int_" + target.id]);
+            }
+            j = Math.abs(pos - 8) / 2;
             break;
         case "time_hh":
-            var top = Math.floor(parseFloat(target.style.top));
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            top < -38 && (top = -38);
-            target.style.top = top + 'em';
-            j = Math.abs(top - 8) / 2;
+            if (pos < -38) {
+                pos = -38;
+                clearInterval(target["int_" + target.id]);
+            }
+            j = Math.abs(pos - 8) / 2;
             break;
         case "time_mm":
-            var top = Math.floor(parseFloat(target.style.top));
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            top < -110 && (top = -110);
-            target.style.top = top + 'em';
-            j = Math.abs(top - 8) / 2;
+            if (pos < -110) {
+                pos = -110;
+                clearInterval(target["int_" + target.id]);
+            }
+            j = Math.abs(pos - 8) / 2;
             break;
         default:
     }
@@ -572,6 +598,6 @@ function setGear(target) {
     if (/date/.test(target.dataset.datetype)) {
         setDateGear();
     } else {
-        //setTimeGear();
+        setTimeGear(hlCalendar.gearDate);
     }
 }
