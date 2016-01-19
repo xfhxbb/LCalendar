@@ -425,15 +425,19 @@ function finishDatetimeEdit() {
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
     var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
-    var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
-    var time_mm = hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val");
+    var time_hh = parseInt(hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val"));
+    time_hh = time_hh > 9 ? time_hh : '0' + time_hh;
+    var time_mm = parseInt(hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val"));
+    time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
     hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd + " " + (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
     cancelDateEdit();
 }
 //时间确认
 function finishTimeEdit() {
-    var time_hh = hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val");
-    var time_mm = hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val");
+    var time_hh = parseInt(hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val"));
+    time_hh = time_hh > 9 ? time_hh : '0' + time_hh;
+    var time_mm = parseInt(hlCalendar.gearDate.querySelector(".time_mm").getAttribute("val"));
+    time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
     hlCalendar.listener.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
     cancelDateEdit();
 }
@@ -548,20 +552,17 @@ function setGear(target) {
     var j = parseFloat(target.getAttribute("val"));
     switch (target.dataset.datetype) {
         case "date_yy":
-
             var minTop = 8 - (passY - 1) * 2;
             if (pos < minTop) {
                 pos = minTop;
                 clearInterval(target["int_" + target.id]);
             }
-            j = Math.abs(pos - 8) / 2;
             break;
         case "date_mm":
             if (pos < -14) {
                 pos = -14;
                 clearInterval(target["int_" + target.id]);
             }
-            j = Math.abs(pos - 8) / 2;
             break;
         case "date_dd":
             var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
@@ -577,25 +578,23 @@ function setGear(target) {
                 pos = minTop;
                 clearInterval(target["int_" + target.id]);
             }
-            j = Math.abs(pos - 8) / 2;
             break;
         case "time_hh":
             if (pos < -38) {
                 pos = -38;
                 clearInterval(target["int_" + target.id]);
             }
-            j = Math.abs(pos - 8) / 2;
             break;
         case "time_mm":
             if (pos < -110) {
                 pos = -110;
                 clearInterval(target["int_" + target.id]);
             }
-            j = Math.abs(pos - 8) / 2;
             break;
         default:
     }
-    target.setAttribute("val", j);
+     j = Math.abs(pos - 8) / 2;
+    target.setAttribute("val",j);
     if (/date/.test(target.dataset.datetype)) {
         setDateGear();
     } else {
