@@ -102,125 +102,6 @@ function dateCtrlInit() {
     hlCalendar.gearDate.querySelector(".date_dd").setAttribute("val", dateArr.dd);
     setDateGear();
 }
-//重置日期节点个数
-function setDateGear() {
-    var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
-    var itemStr = "";
-    if (date_yy && date_yy.getAttribute("val")) {
-        //得到年份的值
-        var yyVal = parseInt(date_yy.getAttribute("val"));
-        //p 当前节点前后需要展示的节点个数
-        for (var p = 0; p <= passY - 1; p++) {
-            itemStr += "<div class='tooth'>" + (hlCalendar.params.minY + p) + "</div>";
-        }
-        date_yy.innerHTML = itemStr;
-        var top = Math.floor(parseFloat(date_yy.style.top));
-        if (!isNaN(top)) {
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = 8 - (passY - 1) * 2;
-            top < minTop && (top = minTop);
-            date_yy.style.top = top + 'em';
-            yyVal = Math.abs(top - 8) / 2;
-            date_yy.setAttribute("val", yyVal);
-        } else {
-            date_yy.style.top = 8 - yyVal * 2 + 'em';
-        }
-    } else {
-        return;
-    }
-    var date_mm = hlCalendar.gearDate.querySelector(".date_mm");
-    if (date_mm && date_mm.getAttribute("val")) {
-        itemStr = "";
-        //得到月份的值
-        var mmVal = parseInt(date_mm.getAttribute("val"));
-        var maxM = 12;
-        minM = 1;
-        //当年份到达最大值
-        if (yyVal == passY - 1) {
-            maxM = hlCalendar.params.maxM;
-        }
-        //当年份到达最小值
-        if (yyVal == 0) {
-            minM = hlCalendar.params.minM;
-        }
-        //没滑动过
-        var top = Math.floor(parseFloat(date_mm.style.top));
-        if (!isNaN(top)) {
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = 8 - (maxM - minM) * 2;
-            top < minTop && (top = minTop);
-            date_mm.style.top = top + 'em';
-            mmVal = Math.abs(top - 8) / 2;
-            date_mm.setAttribute("val", mmVal);
-        } else {
-            date_mm.style.top = 8 - mmVal * 2 + 'em';
-        }
-        //p 当前节点前后需要展示的节点个数
-        for (var p = 0; p < (maxM - minM + 1); p++) {
-            itemStr += "<div class='tooth'>" + (minM + p) + "</div>";
-        }
-        date_mm.innerHTML = itemStr;
-    } else {
-        return;
-    }
-    var date_dd = hlCalendar.gearDate.querySelector(".date_dd");
-    if (date_dd && date_dd.getAttribute("val")) {
-        itemStr = "";
-        //得到日期的值
-        var ddVal = parseInt(date_dd.getAttribute("val"));
-        //返回月份的天数
-        var maxMonthDays = calcDays(yyVal, mmVal);
-        //p 当前节点前后需要展示的节点个数
-        var maxD = maxMonthDays;
-        minD = 1;
-        //当年份月份到达最大值
-        if (yyVal == passY - 1 && hlCalendar.params.maxM == mmVal + 1) {
-            maxD = hlCalendar.params.maxD;
-        }
-        //当年份月份到达最小值
-        if (yyVal == 0 && mmVal == 0) {
-            minD = hlCalendar.params.minD;
-        }
-        var top = Math.floor(parseFloat(date_dd.style.top));
-        //没滑动过
-        if (!isNaN(top)) {
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = 8 - (maxD - minD) * 2;
-            top < minTop && (top = minTop);
-            date_dd.style.top = top + 'em';
-            ddVal = Math.abs(top - 8) / 2;
-            date_dd.setAttribute("val", ddVal);
-        } else {
-            date_dd.style.top = 8 - ddVal * 2 + 'em';
-        }
-        for (var p = 0; p < (maxD - minD + 1); p++) {
-            itemStr += "<div class='tooth'>" + (minD + p) + "</div>";
-        }
-        date_dd.innerHTML = itemStr;
-    } else {
-        return;
-    }
-}
-//返回月份的天数
-function calcDays(year, month) {
-    if (month == 1) {
-        year += hlCalendar.params.minY;
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0 && year % 4000 != 0)) {
-            return 29;
-        } else {
-            return 28;
-        }
-    } else {
-        if (month == 3 || month == 5 || month == 8 || month == 10) {
-            return 30;
-        } else {
-            return 31;
-        }
-    }
-}
 
 //呼出日期+时间插件
 function editDatetime(e) {
@@ -375,6 +256,125 @@ function timeCtrlInit(calendar) {
     calendar.querySelector(".time_mm").setAttribute("val", e.mm);
     setTimeGear(calendar);
 }
+//重置日期节点个数
+function setDateGear() {
+    var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
+    var itemStr = "";
+    if (date_yy && date_yy.getAttribute("val")) {
+        //得到年份的值
+        var yyVal = parseInt(date_yy.getAttribute("val"));
+        //p 当前节点前后需要展示的节点个数
+        for (var p = 0; p <= passY - 1; p++) {
+            itemStr += "<div class='tooth'>" + (hlCalendar.params.minY + p) + "</div>";
+        }
+        date_yy.innerHTML = itemStr;
+        var top = Math.floor(parseFloat(date_yy.style.top));
+        if (!isNaN(top)) {
+            top % 2 == 0 ? (top = top) : (top = top + 1);
+            top > 8 && (top = 8);
+            var minTop = 8 - (passY - 1) * 2;
+            top < minTop && (top = minTop);
+            date_yy.style.top = top + 'em';
+            yyVal = Math.abs(top - 8) / 2;
+            date_yy.setAttribute("val", yyVal);
+        } else {
+            date_yy.style.top = 8 - yyVal * 2 + 'em';
+        }
+    } else {
+        return;
+    }
+    var date_mm = hlCalendar.gearDate.querySelector(".date_mm");
+    if (date_mm && date_mm.getAttribute("val")) {
+        itemStr = "";
+        //得到月份的值
+        var mmVal = parseInt(date_mm.getAttribute("val"));
+        var maxM = 12;
+        minM = 1;
+        //当年份到达最大值
+        if (yyVal == passY - 1) {
+            maxM = hlCalendar.params.maxM;
+        }
+        //当年份到达最小值
+        if (yyVal == 0) {
+            minM = hlCalendar.params.minM;
+        }
+        //p 当前节点前后需要展示的节点个数
+        for (var p = 0; p < (maxM - minM + 1); p++) {
+            itemStr += "<div class='tooth'>" + (minM + p) + "</div>";
+        }
+        date_mm.innerHTML = itemStr;
+        //没滑动过
+        var top = Math.floor(parseFloat(date_mm.style.top));
+        if (!isNaN(top)) {
+            top % 2 == 0 ? (top = top) : (top = top + 1);
+            top > 8 && (top = 8);
+            var minTop = 8 - (maxM - minM) * 2;
+            top < minTop && (top = minTop);
+            date_mm.style.top = top + 'em';
+            mmVal = Math.abs(top - 8) / 2;
+            date_mm.setAttribute("val", mmVal);
+        } else {
+            date_mm.style.top = 8 - mmVal * 2 + 'em';
+        }
+    } else {
+        return;
+    }
+    var date_dd = hlCalendar.gearDate.querySelector(".date_dd");
+    if (date_dd && date_dd.getAttribute("val")) {
+        itemStr = "";
+        //得到日期的值
+        var ddVal = parseInt(date_dd.getAttribute("val"));
+        //返回月份的天数
+        var maxMonthDays = calcDays(yyVal, mmVal);
+        //p 当前节点前后需要展示的节点个数
+        var maxD = maxMonthDays;
+        minD = 1;
+        //当年份月份到达最大值
+        if (yyVal == passY - 1 && hlCalendar.params.maxM == mmVal + 1) {
+            maxD = hlCalendar.params.maxD;
+        }
+        //当年份月份到达最小值
+        if (yyVal == 0 && mmVal == 0) {
+            minD = hlCalendar.params.minD;
+        }
+        for (var p = 0; p < (maxD - minD + 1); p++) {
+            itemStr += "<div class='tooth'>" + (minD + p) + "</div>";
+        }
+        date_dd.innerHTML = itemStr;
+        var top = Math.floor(parseFloat(date_dd.style.top));
+        //没滑动过
+        if (!isNaN(top)) {
+            top % 2 == 0 ? (top = top) : (top = top + 1);
+            top > 8 && (top = 8);
+            var minTop = 8 - (maxD - minD) * 2;
+            top < minTop && (top = minTop);
+            date_dd.style.top = top + 'em';
+            ddVal = Math.abs(top - 8) / 2;
+            date_dd.setAttribute("val", ddVal);
+        } else {
+            date_dd.style.top = 8 - ddVal * 2 + 'em';
+        }
+    } else {
+        return;
+    }
+}
+//返回月份的天数
+function calcDays(year, month) {
+    if (month == 1) {
+        year += hlCalendar.params.minY;
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0 && year % 4000 != 0)) {
+            return 29;
+        } else {
+            return 28;
+        }
+    } else {
+        if (month == 3 || month == 5 || month == 8 || month == 10) {
+            return 30;
+        } else {
+            return 31;
+        }
+    }
+}
 //重置时间节点个数
 function setTimeGear(calendar) {
     var time_hh = calendar.querySelector(".time_hh");
@@ -521,13 +521,14 @@ function rollGear(target) {
         var pos = target["pos_" + target.id];
         var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
         pos += speed;
-        if (Math.abs(speed) > 0.05) {} else {
+        if (Math.abs(speed) > 0.05) {
+
+        } else {
             speed = 0.05;
             var b = Math.round(pos / 2) * 2;
             if (Math.abs(pos - b) < 0.02) {
-                setGear(target);
+                setGear(target, pos);
                 clearInterval(target["int_" + target.id]);
-                return
             } else {
                 if (pos > b) {
                     pos -= speed
@@ -536,65 +537,69 @@ function rollGear(target) {
                 }
             }
         }
-        target.style.top = pos + "em";
+        if (pos > 8) {
+            pos = 8;
+            setGear(target, pos);
+            clearInterval(target["int_" + target.id]);
+        }
+        switch (target.dataset.datetype) {
+            case "date_yy":
+                var minTop = 8 - (passY - 1) * 2;
+                if (pos < minTop) {
+                    pos = minTop;
+                    setGear(target, pos);
+                    clearInterval(target["int_" + target.id]);
+                }
+                break;
+            case "date_mm":
+                if (pos < -14) {
+                    pos = -14;
+                    setGear(target, pos);
+                    clearInterval(target["int_" + target.id]);
+                }
+                break;
+            case "date_dd":
+                var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
+                var date_mm = hlCalendar.gearDate.querySelector(".date_mm");
+                //得到年份的值
+                var yyVal = parseInt(date_yy.getAttribute("val"));
+                //得到月份的值
+                var mmVal = parseInt(date_mm.getAttribute("val"));
+                //返回月份的天数
+                var maxMonthDays = calcDays(yyVal, mmVal);
+                var minTop = 8 - (maxMonthDays - 1) * 2;
+                if (pos < minTop) {
+                    pos = minTop;
+                    setGear(target, pos);
+                    clearInterval(target["int_" + target.id]);
+                }
+                break;
+            case "time_hh":
+                if (pos < -38) {
+                    pos = -38;
+                    setGear(target, pos);
+                    clearInterval(target["int_" + target.id]);
+                }
+                break;
+            case "time_mm":
+                if (pos < -110) {
+                    pos = -110;
+                    setGear(target, pos);
+                    clearInterval(target["int_" + target.id]);
+                }
+                break;
+            default:
+        }
         target["pos_" + target.id] = pos;
-        setGear(target);
+        target.style.top = pos + 'em';
+
         d++;
     }, 30);
 }
 //控制插件滚动后停留的值
-function setGear(target) {
-    var pos = target["pos_" + target.id];
-    if (pos > 8) {
-        pos = 8;
-        clearInterval(target["int_" + target.id]);
-    };
-    var j = parseFloat(target.getAttribute("val"));
-    switch (target.dataset.datetype) {
-        case "date_yy":
-            var minTop = 8 - (passY - 1) * 2;
-            if (pos < minTop) {
-                pos = minTop;
-                clearInterval(target["int_" + target.id]);
-            }
-            break;
-        case "date_mm":
-            if (pos < -14) {
-                pos = -14;
-                clearInterval(target["int_" + target.id]);
-            }
-            break;
-        case "date_dd":
-            var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
-            var date_mm = hlCalendar.gearDate.querySelector(".date_mm");
-            //得到年份的值
-            var yyVal = parseInt(date_yy.getAttribute("val"));
-            //得到月份的值
-            var mmVal = parseInt(date_mm.getAttribute("val"));
-            //返回月份的天数
-            var maxMonthDays = calcDays(yyVal, mmVal);
-            var minTop = 8 - (maxMonthDays - 1) * 2;
-            if (pos < minTop) {
-                pos = minTop;
-                clearInterval(target["int_" + target.id]);
-            }
-            break;
-        case "time_hh":
-            if (pos < -38) {
-                pos = -38;
-                clearInterval(target["int_" + target.id]);
-            }
-            break;
-        case "time_mm":
-            if (pos < -110) {
-                pos = -110;
-                clearInterval(target["int_" + target.id]);
-            }
-            break;
-        default:
-    }
-     j = Math.abs(pos - 8) / 2;
-    target.setAttribute("val",j);
+function setGear(target, pos) {
+    var gearVal = Math.abs(pos - 8) / 2;
+    target.setAttribute("val", gearVal);
     if (/date/.test(target.dataset.datetype)) {
         setDateGear();
     } else {
