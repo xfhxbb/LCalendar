@@ -20,4 +20,5 @@ lCalendar v0.6移动端日期时间选择控件
 <script src="lCalendar.js"></script>
 ...
 ```
+由于是实验性的控件，可能会存在bug，代码我后续会持续优化。
 欢迎来我的博客留言讨论：http://www.cnblogs.com/xfhxbb/p/lCalendar.html
