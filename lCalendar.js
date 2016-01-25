@@ -189,9 +189,10 @@ function dateTimeCtrlInit(calendar) {
         dateArr.mm = rs[1].replace(/-/g, "") - 1;
         dateArr.dd = rs[2].replace(/-/g, "") - 1;
         dateArr.hh = parseInt(rs[3].replace(/\s0?/g, ""));
-        dateArr.mi = parseInt(rs[4].replace(/:0?/g, ""))
+        dateArr.mi = parseInt(rs[4].replace(/:0?/g, ""));
     } else {
         dateArr.yy = dateArr.yy + 1900 - hlCalendar.params.minY;
+        //dateArr.mm = dateArr.mm - hlCalendar.params.minM;
     }
     calendar.querySelector(".date_yy").setAttribute("val", dateArr.yy);
     calendar.querySelector(".date_mm").setAttribute("val", dateArr.mm);
@@ -288,34 +289,30 @@ function setDateGear() {
         itemStr = "";
         //得到月份的值
         var mmVal = parseInt(date_mm.getAttribute("val"));
-        var maxM = 12;
-        minM = 1;
+        var maxM = 11;
+        minM = 0;
         //当年份到达最大值
         if (yyVal == passY - 1) {
-            maxM = hlCalendar.params.maxM;
+            maxM = hlCalendar.params.maxM-1;
         }
         //当年份到达最小值
         if (yyVal == 0) {
-            minM = hlCalendar.params.minM;
+            minM = hlCalendar.params.minM-1;
         }
         //p 当前节点前后需要展示的节点个数
-        for (var p = 0; p < (maxM - minM + 1); p++) {
-            itemStr += "<div class='tooth'>" + (minM + p) + "</div>";
+        for (var p = 0; p < maxM - minM+1; p++) {
+            itemStr += "<div class='tooth'>" + (minM + p+1) + "</div>";
         }
         date_mm.innerHTML = itemStr;
-        //没滑动过
-        var top = Math.floor(parseFloat(date_mm.style.top));
-        if (!isNaN(top)) {
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = 8 - (maxM - minM) * 2;
-            top < minTop && (top = minTop);
-            date_mm.style.top = top + 'em';
-            mmVal = Math.abs(top - 8) / 2;
-            date_mm.setAttribute("val", mmVal);
-        } else {
-            date_mm.style.top = 8 - mmVal * 2 + 'em';
+        if(mmVal>maxM){
+             mmVal=maxM;
+             date_mm.setAttribute("val", mmVal);
         }
+        else if(mmVal<minM){
+             mmVal=maxM;
+             date_mm.setAttribute("val", mmVal);
+        }
+        date_mm.style.top = 8 - (mmVal-minM) * 2 + 'em';
     } else {
         return;
     }
@@ -327,33 +324,29 @@ function setDateGear() {
         //返回月份的天数
         var maxMonthDays = calcDays(yyVal, mmVal);
         //p 当前节点前后需要展示的节点个数
-        var maxD = maxMonthDays;
-        minD = 1;
+        var maxD = maxMonthDays-1;
+        var minD = 0;
         //当年份月份到达最大值
         if (yyVal == passY - 1 && hlCalendar.params.maxM == mmVal + 1) {
-            maxD = hlCalendar.params.maxD;
+            maxD = hlCalendar.params.maxD-1;
         }
-        //当年份月份到达最小值
-        if (yyVal == 0 && mmVal == 0) {
-            minD = hlCalendar.params.minD;
+        //当年、月到达最小值
+        if (yyVal == 0 &&  hlCalendar.params.minM == mmVal+1) {
+            minD = hlCalendar.params.minD-1;
         }
-        for (var p = 0; p < (maxD - minD + 1); p++) {
-            itemStr += "<div class='tooth'>" + (minD + p) + "</div>";
+        for (var p = 0; p <maxD - minD+1; p++) {
+            itemStr += "<div class='tooth'>" + (minD + p+1) + "</div>";
         }
         date_dd.innerHTML = itemStr;
-        var top = Math.floor(parseFloat(date_dd.style.top));
-        //没滑动过
-        if (!isNaN(top)) {
-            top % 2 == 0 ? (top = top) : (top = top + 1);
-            top > 8 && (top = 8);
-            var minTop = 8 - (maxD - minD) * 2;
-            top < minTop && (top = minTop);
-            date_dd.style.top = top + 'em';
-            ddVal = Math.abs(top - 8) / 2;
-            date_dd.setAttribute("val", ddVal);
-        } else {
-            date_dd.style.top = 8 - ddVal * 2 + 'em';
+        if(ddVal>maxD){
+             ddVal=maxD;
+             date_dd.setAttribute("val", ddVal);
         }
+        else if(ddVal<minD){
+             ddVal=minD;
+             date_dd.setAttribute("val", ddVal);
+        }
+        date_dd.style.top = 8 -(ddVal-minD) * 2 + 'em';
     } else {
         return;
     }
@@ -381,11 +374,11 @@ function setTimeGear(calendar) {
     if (time_hh && time_hh.getAttribute("val")) {
         var i = "";
         var hhVal = parseInt(time_hh.getAttribute("val"));
-        time_hh.style.top = 8 - hhVal * 2 + 'em';
         for (var g = 0; g <= 23; g++) {
             i += "<div class='tooth'>" + g + "</div>";
         }
         time_hh.innerHTML = i;
+        time_hh.style.top = 8 - hhVal * 2 + 'em';
     } else {
         return
     }
@@ -393,11 +386,11 @@ function setTimeGear(calendar) {
     if (time_mm && time_mm.getAttribute("val")) {
         var i = "";
         var mmVal = parseInt(time_mm.getAttribute("val"));
-        time_mm.style.top = 8 - mmVal * 2 + 'em';
         for (var g = 0; g <= 59; g++) {
             i += "<div class='tooth'>" + g + "</div>";
         }
         time_mm.innerHTML = i;
+        time_mm.style.top = 8 - mmVal* 2 + 'em';
     } else {
         return
     }
@@ -411,9 +404,9 @@ function cancelDateEdit() {
 //日期确认
 function finishDateEdit() {
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + 1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + 1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
     hlCalendar.listener.value = (date_yy % passY + hlCalendar.params.minY) + "-" + date_mm + "-" + date_dd;
     cancelDateEdit();
@@ -421,9 +414,9 @@ function finishDateEdit() {
 //日期时间确认
 function finishDatetimeEdit() {
     var date_yy = parseInt(hlCalendar.gearDate.querySelector(".date_yy").getAttribute("val"));
-    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val")) + minM;
+    var date_mm = parseInt(hlCalendar.gearDate.querySelector(".date_mm").getAttribute("val"))+1;
     date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
-    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val")) + minD;
+    var date_dd = parseInt(hlCalendar.gearDate.querySelector(".date_dd").getAttribute("val"))+1;
     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
     var time_hh = parseInt(hlCalendar.gearDate.querySelector(".time_hh").getAttribute("val"));
     time_hh = time_hh > 9 ? time_hh : '0' + time_hh;
@@ -516,6 +509,7 @@ function gearTouchEnd(e) {
 //缓动效果
 function rollGear(target) {
     var d = 0;
+    var stopGear=false;
     clearInterval(target["int_" + target.id]);
     target["int_" + target.id] = setInterval(function() {
         var pos = target["pos_" + target.id];
@@ -527,8 +521,7 @@ function rollGear(target) {
             speed = 0.05;
             var b = Math.round(pos / 2) * 2;
             if (Math.abs(pos - b) < 0.02) {
-                setGear(target, pos);
-                clearInterval(target["int_" + target.id]);
+                    stopGear=true;
             } else {
                 if (pos > b) {
                     pos -= speed
@@ -539,22 +532,43 @@ function rollGear(target) {
         }
         if (pos > 8) {
             pos = 8;
-            setGear(target, pos);
-            clearInterval(target["int_" + target.id]);
+            stopGear=true;
         }
         switch (target.dataset.datetype) {
             case "date_yy":
                 var minTop = 8 - (passY - 1) * 2;
                 if (pos < minTop) {
                     pos = minTop;
-                    setGear(target, pos);
+                    stopGear=true;
+                }
+                if(stopGear){
+                    var gearVal = Math.abs(pos - 8) / 2;
+                    setGear(target, gearVal);
                     clearInterval(target["int_" + target.id]);
                 }
                 break;
             case "date_mm":
-                if (pos < -14) {
-                    pos = -14;
-                    setGear(target, pos);
+                var date_yy = hlCalendar.gearDate.querySelector(".date_yy");
+                //得到年份的值
+                var yyVal = parseInt(date_yy.getAttribute("val"));
+                var maxM = 11;
+                var minM = 0;
+                //当年份到达最大值
+                if (yyVal == passY - 1) {
+                    maxM = hlCalendar.params.maxM-1;
+                }
+                //当年份到达最小值
+                if (yyVal == 0) {
+                    minM = hlCalendar.params.minM-1;
+                }
+                var minTop = 8 - (maxM-minM) * 2;
+                if (pos < minTop) {
+                    pos = minTop;
+                    stopGear=true;
+                }
+                if(stopGear){
+                    var gearVal = Math.abs(pos - 8) / 2+minM;
+                    setGear(target, gearVal);
                     clearInterval(target["int_" + target.id]);
                 }
                 break;
@@ -567,24 +581,46 @@ function rollGear(target) {
                 var mmVal = parseInt(date_mm.getAttribute("val"));
                 //返回月份的天数
                 var maxMonthDays = calcDays(yyVal, mmVal);
-                var minTop = 8 - (maxMonthDays - 1) * 2;
+                var maxD = maxMonthDays-1;
+                var minD = 0;
+                //当年份月份到达最大值
+                if (yyVal == passY - 1 && hlCalendar.params.maxM == mmVal + 1) {
+                    maxD = hlCalendar.params.maxD-1;
+                }
+                //当年、月到达最小值
+                if (yyVal == 0 &&  hlCalendar.params.minM == mmVal+1) {
+                    minD = hlCalendar.params.minD-1;
+                }
+                var minTop = 8 - (maxD-minD) * 2;
                 if (pos < minTop) {
                     pos = minTop;
-                    setGear(target, pos);
+                    stopGear=true;
+                }
+                if(stopGear){
+                    var gearVal = Math.abs(pos - 8) / 2+minD;
+                    setGear(target, gearVal);
                     clearInterval(target["int_" + target.id]);
                 }
                 break;
             case "time_hh":
                 if (pos < -38) {
                     pos = -38;
-                    setGear(target, pos);
+                    stopGear=true;
+                }
+                if(stopGear){
+                    var gearVal = Math.abs(pos - 8) / 2;
+                    setGear(target, gearVal);
                     clearInterval(target["int_" + target.id]);
                 }
                 break;
             case "time_mm":
                 if (pos < -110) {
                     pos = -110;
-                    setGear(target, pos);
+                    stopGear=true;
+                }
+                if(stopGear){
+                    var gearVal = Math.abs(pos - 8) / 2;
+                    setGear(target, gearVal);
                     clearInterval(target["int_" + target.id]);
                 }
                 break;
@@ -597,9 +633,8 @@ function rollGear(target) {
     }, 30);
 }
 //控制插件滚动后停留的值
-function setGear(target, pos) {
-    var gearVal = Math.abs(pos - 8) / 2;
-    target.setAttribute("val", gearVal);
+function setGear(target, val) {
+    target.setAttribute("val", val);
     if (/date/.test(target.dataset.datetype)) {
         setDateGear();
     } else {
