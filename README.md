@@ -2,23 +2,32 @@ lCalendar v0.6移动端日期时间选择控件
 ==========
 纯原生js的移动端日期插件，不依赖任何库，体积非常小只有10k
 ##用法
-直接在html页面中引入input标签，绑定三种事件可调出不同的样式插件，对应说明为：`editDate(event)` 呼出日期选择、`editTime(event)`呼出时间选择、`editDatetime(event)`呼出日期时间选择，此外提供`data-hl-calendar`控制最小日期和最大日期：
+在html页面中引入input标签，通过自定义属性`data-hl-calendar`控制最小日期和最大日期，写法如下：
 ```
 ...
-<input type="text" readonly="" name="input_date" placeholder="请输入日期" onClick="editDate(event);" data-hl-calendar="2000-01-01,2018-01-29" />
+<input type="text" readonly="" name="input_date" placeholder="请输入日期" data-hl-calendar="2000-01-01,2018-01-29" />
 ...
 ```
-样式文件记得引入到页面中：
+将样式文件引入到页面中：
 ```
 ...
 <link rel="stylesheet" href="lCalendar.css">
 ...
 ```
-不要忘了引入js文件到页面中：
+同时引入js文件到页面中：
 ```
 ...
 <script src="lCalendar.js"></script>
 ...
 ```
-由于是实验性的控件，可能会存在bug，代码我后续会持续优化。
-欢迎来我的博客留言讨论：http://www.cnblogs.com/xfhxbb/p/lCalendar.html
+初始化插件：
+```
+...
+var calendar = new lCalendar();
+calendar.init({
+    'trigger': '#demo1',//标签id
+    'type': 'date'//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择
+});
+...
+```
+调用起来非常简单，由于是实验性的控件，可能会存在bug，代码我后续会持续优化，如果喜欢希望赏颗星哦。
