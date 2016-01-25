@@ -8,7 +8,7 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <meta content="email=no" name="format-detection">
-    <title>lCalendar日期时间选择控件</title>
+    <title>lCalendar纯原生js日期时间选择</title>
     <style type="text/css">
     * {
         margin: 0;
@@ -34,13 +34,15 @@
         -webkit-overflow-scrolling: touch;
         overflow-scrolling: touch;
     }
-    h1{
-	background-color: #19b5ee;
-    color: #fff;
-    font-size: 25px;
-    text-align: center;
-    padding: 10px;
-	}
+    
+    h1 {
+        background-color: #19b5ee;
+        color: #fff;
+        font-size: 25px;
+        text-align: center;
+        padding: 10px;
+    }
+    
     input {
         width: 90%;
         height: 40px;
@@ -55,17 +57,34 @@
 </head>
 
 <body>
-<h1>lCalendar日期时间选择控件</h1>
+    <h1>lCalendar纯原生js日期时间选择</h1>
     <div>
-        <input type="text" readonly="" name="input_date" placeholder="请输入日期" onClick="editDate(event);" data-hl-calendar="2000-01-01,2018-01-29" />
+        <input id="demo1" type="text" readonly="" name="input_date" placeholder="日期选择特效" data-lcalendar="2016-01-11,2016-05-29" />
     </div>
     <div>
-        <input type="text" readonly="" name="input_date" placeholder="请输入日期和时间" onClick="editDatetime(event);" data-hl-calendar="2000-01-01,2018-01-29" />
+        <input id="demo2" type="text" readonly="" name="input_date" placeholder="日期和时间选择特效" data-lcalendar="2016-01-11,2016-05-29" />
     </div>
     <div>
-        <input type="text" readonly="" name="input_date" placeholder="请输入时间" onClick="editTime(event);" />
+        <input id="demo3" type="text" readonly="" name="input_date" placeholder="时间选择特效" />
     </div>
     <script src="lCalendar.js"></script>
+    <script>
+    var calendar = new lCalendar();
+    calendar.init({
+        'trigger': '#demo1',
+        'type': 'date'
+    });
+    var calendardatetime = new lCalendar();
+    calendardatetime.init({
+        'trigger': '#demo2',
+        'type': 'datetime'
+    });
+    var calendartime = new lCalendar();
+    calendartime.init({
+        'trigger': '#demo3',
+        'type': 'time'
+    });
+    </script>
 </body>
 
 </html>
