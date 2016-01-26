@@ -213,7 +213,7 @@ window.lCalendar = (function() {
                 function popupTime(e) {
                     _self.gearDate = document.createElement("div");
                     _self.gearDate.className = "gearDate";
-                    _self.gearDate.innerHTML = '<div class="time_ctrl slideInUp">' +
+                    _self.gearDate.innerHTML = '<div class="date_ctrl slideInUp">' +
                         '<div class="date_btn_box">' +
                         '<div class="date_btn lcalendar_cancel">取消</div>' +
                         '<div class="date_btn lcalendar_finish">确定</div>' +
@@ -485,10 +485,9 @@ window.lCalendar = (function() {
                         var pos = target["pos_" + target.id];
                         var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
                         pos += speed;
-                        if (Math.abs(speed) > 0.05) {
-
+                        if (Math.abs(speed) > 0.1) {
                         } else {
-                            speed = 0.05;
+                            speed = 0.1;
                             var b = Math.round(pos / 2) * 2;
                             if (Math.abs(pos - b) < 0.02) {
                                 stopGear = true;
@@ -603,6 +602,7 @@ window.lCalendar = (function() {
                 }
                 //控制插件滚动后停留的值
                 function setGear(target, val) {
+                    val=Math.round(val);
                     target.setAttribute("val", val);
                     if (/date/.test(target.dataset.datetype)) {
                         setDateGearTooth();
@@ -611,13 +611,14 @@ window.lCalendar = (function() {
                     }
                 }
                 //取消
-                function closeMobileCalendar() {
+                function closeMobileCalendar(e) {
+                    e.preventDefault();
                     var evt = new CustomEvent('input');
                     _self.trigger.dispatchEvent(evt);
                     document.body.removeChild(_self.gearDate);
                 }
                 //日期确认
-                function finishMobileDate() {
+                function finishMobileDate(e) {
                     var passY = _self.maxY - _self.minY + 1;
                     var date_yy = parseInt(Math.round(_self.gearDate.querySelector(".date_yy").getAttribute("val")));
                     var date_mm = parseInt(Math.round(_self.gearDate.querySelector(".date_mm").getAttribute("val"))) + 1;
@@ -625,10 +626,10 @@ window.lCalendar = (function() {
                     var date_dd = parseInt(Math.round(_self.gearDate.querySelector(".date_dd").getAttribute("val"))) + 1;
                     date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
                     _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm + "-" + date_dd;
-                    closeMobileCalendar();
+                    closeMobileCalendar(e);
                 }
                 //日期时间确认
-                function finishMobileDateTime() {
+                function finishMobileDateTime(e) {
                     var passY = _self.maxY - _self.minY + 1;
                     var date_yy = parseInt(Math.round(_self.gearDate.querySelector(".date_yy").getAttribute("val")));
                     var date_mm = parseInt(Math.round(_self.gearDate.querySelector(".date_mm").getAttribute("val"))) + 1;
@@ -640,16 +641,16 @@ window.lCalendar = (function() {
                     var time_mm = parseInt(Math.round(_self.gearDate.querySelector(".time_mm").getAttribute("val")));
                     time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
                     _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm + "-" + date_dd + " " + (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
-                    closeMobileCalendar();
+                    closeMobileCalendar(e);
                 }
                 //时间确认
-                function finishMobileTime() {
+                function finishMobileTime(e) {
                     var time_hh = parseInt(Math.round(_self.gearDate.querySelector(".time_hh").getAttribute("val")));
                     time_hh = time_hh > 9 ? time_hh : '0' + time_hh;
                     var time_mm = parseInt(Math.round(_self.gearDate.querySelector(".time_mm").getAttribute("val")));
                     time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
                     _self.trigger.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
-                    closeMobileCalendar();
+                    closeMobileCalendar(e);
                 }
                 _self.trigger.addEventListener('click', {
                     "date": popupDate,
