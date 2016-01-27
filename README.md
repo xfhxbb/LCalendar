@@ -5,7 +5,7 @@ lCalendar v0.8移动端日期时间选择控件
 在html页面中引入input标签，通过自定义属性`data-hl-calendar`控制最小日期和最大日期，写法如下：
 ```
 ...
-<input type="text" readonly="" name="input_date" placeholder="请输入日期" data-hl-calendar="2000-01-01,2018-01-29" />
+<input type="text" readonly="" name="input_date" placeholder="请输入日期" data-lcalendar="2000-01-01,2018-01-29" />
 ...
 ```
 将样式文件引入到页面中：
