@@ -2,7 +2,7 @@ lCalendar v0.8移动端日期时间选择控件
 ==========
 纯原生js的移动端日期插件，不依赖任何库，体积非常小只有10k
 ##用法
-在html页面中引入input标签，通过自定义属性`data-hl-calendar`控制最小日期和最大日期，写法如下：
+在html页面中引入input标签，通过自定义属性`data-lcalendar`控制最小日期和最大日期，写法如下：
 ```
 ...
 <input type="text" readonly="" name="input_date" placeholder="请输入日期" data-lcalendar="2000-01-01,2018-01-29" />
