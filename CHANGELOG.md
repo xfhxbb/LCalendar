@@ -2,6 +2,7 @@
 
 ## lCalendar - 修改于2016年1月29日
 * 解决滑动月份的同时异常的跳动年份值的bug（感谢网友[dillon-cupider](https://github.com/dillon-cupider)提供bug）
+* 解决安卓手机中滑动和点击迟钝的问题
 
 ## lCalendar - 修改于2016年1月28日
 * 解决安卓系统中滑动效果卡顿问题
