@@ -288,7 +288,7 @@ window.lCalendar = (function() {
                         date_yy.style["-webkit-transform"] = 'translate3d(0,' + top + 'em,0)';
                         date_yy.setAttribute('top', top + 'em');
                         yyVal = Math.abs(top - 8) / 2;
-                        date_yy.setAttribute("top", yyVal);
+                        date_yy.setAttribute("val", yyVal);
                     } else {
                         date_yy.style["-webkit-transform"] = 'translate3d(0,' + (8 - yyVal * 2) + 'em,0)';
                         date_yy.setAttribute('top', 8 - yyVal * 2 + 'em');
