@@ -26,7 +26,7 @@ lCalendar v1.1移动端日期时间选择控件
 var calendar = new lCalendar();
 calendar.init({
     'trigger': '#demo1',//标签id
-    'type': 'date'//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择
+    'type': 'date'//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择
 });
 ...
 ```
