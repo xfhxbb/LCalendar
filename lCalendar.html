@@ -67,6 +67,9 @@
     <div>
         <input id="demo3" type="text" readonly="" name="input_date" placeholder="时间选择特效" />
     </div>
+    <div>
+        <input id="demo4" type="text" readonly="" name="input_date" placeholder="年月选择特效" />
+    </div>
     <script src="js/lCalendar.min.js"></script>
     <script>
     var calendar = new lCalendar();
@@ -83,6 +86,11 @@
     calendartime.init({
         'trigger': '#demo3',
         'type': 'time'
+    });
+    var calendarym = new lCalendar();
+    calendartime.init({
+        'trigger': '#demo4',
+        'type': 'ym'
     });
     </script>
 </body>
