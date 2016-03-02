@@ -1,7 +1,7 @@
 # 更新日志
 
-## lCalendar - 修改于2016年3月2日
-* 为了防止l和I混淆，统一将插件名称更改为LCalendar
+## LCalendar - 修改于2016年3月2日
+* 为了防止l和I混淆，统一将插件名称更改为`LCalendar`
 * 修复LCalendar和LArea插件同时使用时存在的样式异常
 
 ## lCalendar - 修改于2016年2月17日
