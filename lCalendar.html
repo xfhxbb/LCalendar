@@ -8,7 +8,7 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <meta content="email=no" name="format-detection">
-    <title>lCalendar纯原生js日期时间选择</title>
+    <title>LCalendar纯原生js日期时间选择</title>
     <style type="text/css">
     * {
         margin: 0;
@@ -53,11 +53,11 @@
         padding: 5px;
     }
     </style>
-    <link rel="stylesheet" href="css/lCalendar.css">
+    <link rel="stylesheet" href="css/LCalendar.css">
 </head>
 
 <body>
-    <h1>lCalendar纯原生js日期时间选择</h1>
+    <h1>LCalendar纯原生js日期时间选择</h1>
     <div>
         <input id="demo1" type="text" readonly="" name="input_date" placeholder="日期选择特效" data-lcalendar="2016-01-11,2016-05-29" />
     </div>
@@ -70,24 +70,24 @@
     <div>
         <input id="demo4" type="text" readonly="" name="input_date" placeholder="年月选择特效" />
     </div>
-    <script src="js/lCalendar.min.js"></script>
+    <script src="js/LCalendar.min.js"></script>
     <script>
-    var calendar = new lCalendar();
+    var calendar = new LCalendar();
     calendar.init({
         'trigger': '#demo1',
         'type': 'date'
     });
-    var calendardatetime = new lCalendar();
+    var calendardatetime = new LCalendar();
     calendardatetime.init({
         'trigger': '#demo2',
         'type': 'datetime'
     });
-    var calendartime = new lCalendar();
+    var calendartime = new LCalendar();
     calendartime.init({
         'trigger': '#demo3',
         'type': 'time'
     });
-    var calendarym = new lCalendar();
+    var calendarym = new LCalendar();
     calendartime.init({
         'trigger': '#demo4',
         'type': 'ym'

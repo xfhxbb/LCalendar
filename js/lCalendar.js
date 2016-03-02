@@ -1,5 +1,5 @@
 /*
- * lCalendar日期控件
+ * LCalendar日期控件
  * 
  * 作者：黄磊
  * 
@@ -9,7 +9,7 @@
  * 
  * 创建于：2016-01-08
  */
-window.lCalendar = (function() {
+window.LCalendar = (function() { 
     var MobileCalendar = function() {
         this.gearDate;
         this.minY = 1900;
