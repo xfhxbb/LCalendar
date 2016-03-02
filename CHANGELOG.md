@@ -1,6 +1,9 @@
 # 更新日志
 
-## LCalendar - 修改于2016年3月2日
+## LCalendar1.4 - 修改于2016年3月2日
+* 仿IOS原生样式调整插件UI风格
+
+## LCalendar1.3 - 修改于2016年3月2日
 * 为了防止l和I混淆，统一将插件名称更改为`LCalendar`
 * 修复LCalendar和LArea插件同时使用时存在的样式异常
 
