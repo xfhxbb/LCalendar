@@ -1,4 +1,4 @@
-lCalendar v1.2移动端日期时间选择控件
+LCalendar v1.3移动端日期时间选择控件
 ==========
 纯原生js的移动端日期插件，不依赖任何库，体积非常小只有10k
 ##用法
@@ -11,19 +11,19 @@ lCalendar v1.2移动端日期时间选择控件
 将样式文件引入到页面中：
 ```
 ...
-<link rel="stylesheet" href="lCalendar.css">
+<link rel="stylesheet" href="LCalendar.css">
 ...
 ```
 同时引入js文件到页面中：
 ```
 ...
-<script src="lCalendar.js"></script>
+<script src="LCalendar.js"></script>
 ...
 ```
 初始化插件：
 ```
 ...
-var calendar = new lCalendar();
+var calendar = new LCalendar();
 calendar.init({
     'trigger': '#demo1',//标签id
     'type': 'date'//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择
