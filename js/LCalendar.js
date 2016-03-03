@@ -1,15 +1,18 @@
 /*
- * lCalendar日期控件
+ * LCalendar日期控件
  * 
  * 作者：黄磊
  * 
- * 邮箱：xfhxbb@yeah.net
+ * 报告漏洞，意见或建议, 请联系邮箱：xfhxbb@yeah.net
+ * 
+ * 创建于：2016年2月8日
  * 
  * Copyright 2016
- * 
- * 创建于：2016-01-08
- */
-window.lCalendar = (function() {
+ *
+ * 获得使用本类库的许可, 您必须保留著作权声明信息。
+ *
+*/
+window.LCalendar = (function() { 
     var MobileCalendar = function() {
         this.gearDate;
         this.minY = 1900;
@@ -720,7 +723,7 @@ window.lCalendar = (function() {
                 _self.trigger.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
                 closeMobileCalendar(e);
             }
-            _self.trigger.addEventListener('touchstart', {
+            _self.trigger.addEventListener('click', {
                 "ym": popupYM,
                 "date": popupDate,
                 "datetime": popupDateTime,
