@@ -1,5 +1,5 @@
 /*
- * LCalendar日期控件
+ * lCalendar日期控件
  * 
  * 作者：黄磊
  * 
@@ -9,7 +9,7 @@
  * 
  * 创建于：2016-01-08
  */
-window.LCalendar = (function() { 
+window.lCalendar = (function() {
     var MobileCalendar = function() {
         this.gearDate;
         this.minY = 1900;
@@ -720,7 +720,7 @@ window.LCalendar = (function() {
                 _self.trigger.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
                 closeMobileCalendar(e);
             }
-            _self.trigger.addEventListener('click', {
+            _self.trigger.addEventListener('touchstart', {
                 "ym": popupYM,
                 "date": popupDate,
                 "datetime": popupDateTime,
