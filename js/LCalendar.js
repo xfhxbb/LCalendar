@@ -11,16 +11,16 @@
  *
  * 获得使用本类库的许可, 您必须保留著作权声明信息。
  *
-*/
-window.LCalendar = (function() { 
+ */
+window.LCalendar = (function() {
     var MobileCalendar = function() {
         this.gearDate;
         this.minY = 1900;
-        this.minM = 1,
-            this.minD = 1,
-            this.maxY = 2099,
-            this.maxM = 12,
-            this.maxD = 31
+        this.minM = 1;
+        this.minD = 1;
+        this.maxY = 2099;
+        this.maxM = 12;
+        this.maxD = 31;
     }
     MobileCalendar.prototype = {
         init: function(params) {
@@ -33,6 +33,18 @@ window.LCalendar = (function() {
                 this.minM = ~~minArr[1];
                 this.minD = ~~minArr[2];
                 var maxArr = arr[1].split('-');
+                this.maxY = ~~maxArr[0];
+                this.maxM = ~~maxArr[1];
+                this.maxD = ~~maxArr[2];
+            }
+            if (params.minDate) {
+                var minArr = params.minDate.split('-');
+                this.minY = ~~minArr[0];
+                this.minM = ~~minArr[1];
+                this.minD = ~~minArr[2];
+            }
+            if (params.maxDate) {
+                var maxArr = params.maxDate.split('-');
                 this.maxY = ~~maxArr[0];
                 this.maxM = ~~maxArr[1];
                 this.maxD = ~~maxArr[2];
