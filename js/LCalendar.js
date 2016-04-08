@@ -108,7 +108,7 @@ window.LCalendar = (function() {
             function dateCtrlInit() {
                 var date = new Date();
                 var dateArr = {
-                    yy: date.getYear(),
+                    yy: date.getFullYear(),
                     mm: date.getMonth(),
                     dd: date.getDate() - 1
                 };
@@ -118,7 +118,7 @@ window.LCalendar = (function() {
                     dateArr.mm = rs[1].replace(/-/g, "") - 1;
                     dateArr.dd = rs[2].replace(/-/g, "") - 1;
                 } else {
-                    dateArr.yy = dateArr.yy + 1900 - _self.minY;
+                    dateArr.yy = dateArr.yy - _self.minY;
                 }
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
@@ -170,7 +170,7 @@ window.LCalendar = (function() {
             function ymCtrlInit() {
                 var date = new Date();
                 var dateArr = {
-                    yy: date.getYear(),
+                    yy: date.getFullYear(),
                     mm: date.getMonth()
                 };
                 if (/^\d{4}-\d{1,2}$/.test(_self.trigger.value)) {
@@ -178,7 +178,7 @@ window.LCalendar = (function() {
                     dateArr.yy = rs[0] - _self.minY;
                     dateArr.mm = rs[1].replace(/-/g, "") - 1;
                 } else {
-                    dateArr.yy = dateArr.yy + 1900 - _self.minY;
+                    dateArr.yy = dateArr.yy - _self.minY;
                 }
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
@@ -259,7 +259,7 @@ window.LCalendar = (function() {
             function dateTimeCtrlInit() {
                 var date = new Date();
                 var dateArr = {
-                    yy: date.getYear(),
+                    yy: date.getFullYear(),
                     mm: date.getMonth(),
                     dd: date.getDate() - 1,
                     hh: date.getHours(),
@@ -273,7 +273,7 @@ window.LCalendar = (function() {
                     dateArr.hh = parseInt(rs[3].replace(/\s0?/g, ""));
                     dateArr.mi = parseInt(rs[4].replace(/:0?/g, ""));
                 } else {
-                    dateArr.yy = dateArr.yy + 1900 - _self.minY;
+                    dateArr.yy = dateArr.yy - _self.minY;
                 }
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
