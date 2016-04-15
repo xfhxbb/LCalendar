@@ -1,7 +1,10 @@
 # 更新日志
 
+## LCalendar1.7 - 修改于2016年4月15日
+* 改善了插件的样式，重新优化了缓动体验，使选中更加流畅
+
 ## LCalendar1.6 - 修改于2016年4月8日
-* 重要漏洞修复：从 ECMAScript v3 开始，JavaScript 的实现就不再使用getYear()方法，而使用 getFullYear() 方法取而代之
+* 重要漏洞修复：使用 getFullYear()取代getYear()
 
 ## LCalendar1.5 - 修改于2016年3月18日
 * 新增minDate、maxDate初始化参数，便于初始化时动态配置时间范围

@@ -3,6 +3,8 @@
  * 
  * 作者：黄磊
  * 
+ * 项目地址：https://github.com/xfhxbb/LCalendar
+ * 
  * 报告漏洞，意见或建议, 请联系邮箱：xfhxbb@yeah.net
  * 
  * 创建于：2016年2月8日
@@ -503,6 +505,7 @@ window.LCalendar = (function() {
                 } else {
                     target["o_d_" + target.id] = 0;
                 }
+                target.style.webkitTransitionDuration = target.style.transitionDuration = '0ms';
             }
             //手指移动
             function gearTouchMove(e) {
@@ -517,11 +520,13 @@ window.LCalendar = (function() {
                 }
                 target["new_" + target.id] = e.targetTouches[0].screenY;
                 target["n_t_" + target.id] = (new Date()).getTime();
-                //var f = (target["new_" + target.id] - target["old_" + target.id]) * 18 / target.clientHeight;
-                var f = (target["new_" + target.id] - target["old_" + target.id]) * 18 / 370;
+                var f = (target["new_" + target.id] - target["old_" + target.id]) * 9 / window.innerHeight;
                 target["pos_" + target.id] = target["o_d_" + target.id] + f;
                 target.style["-webkit-transform"] = 'translate3d(0,' + target["pos_" + target.id] + 'em,0)';
                 target.setAttribute('top', target["pos_" + target.id] + 'em');
+                if (e.targetTouches[0].screenY < 1) {
+                    gearTouchEnd(e);
+                };
             }
             //离开屏幕
             function gearTouchEnd(e) {
@@ -553,6 +558,11 @@ window.LCalendar = (function() {
             function rollGear(target) {
                 var d = 0;
                 var stopGear = false;
+
+                function setDuration() {
+                    target.style.webkitTransitionDuration = target.style.transitionDuration = '200ms';
+                    stopGear = true;
+                }
                 var passY = _self.maxY - _self.minY + 1;
                 clearInterval(target["int_" + target.id]);
                 target["int_" + target.id] = setInterval(function() {
@@ -560,28 +570,20 @@ window.LCalendar = (function() {
                     var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
                     pos += speed;
                     if (Math.abs(speed) > 0.1) {} else {
-                        speed = 0.1;
                         var b = Math.round(pos / 2) * 2;
-                        if (Math.abs(pos - b) < 0.02) {
-                            stopGear = true;
-                        } else {
-                            if (pos > b) {
-                                pos -= speed
-                            } else {
-                                pos += speed
-                            }
-                        }
+                        pos = b;
+                        setDuration();
                     }
                     if (pos > 8) {
                         pos = 8;
-                        stopGear = true;
+                        setDuration();
                     }
                     switch (target.dataset.datetype) {
                         case "date_yy":
                             var minTop = 8 - (passY - 1) * 2;
                             if (pos < minTop) {
                                 pos = minTop;
-                                stopGear = true;
+                                setDuration();
                             }
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
@@ -606,7 +608,7 @@ window.LCalendar = (function() {
                             var minTop = 8 - (maxM - minM) * 2;
                             if (pos < minTop) {
                                 pos = minTop;
-                                stopGear = true;
+                                setDuration();
                             }
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2 + minM;
@@ -636,7 +638,7 @@ window.LCalendar = (function() {
                             var minTop = 8 - (maxD - minD) * 2;
                             if (pos < minTop) {
                                 pos = minTop;
-                                stopGear = true;
+                                setDuration();
                             }
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2 + minD;
@@ -647,7 +649,7 @@ window.LCalendar = (function() {
                         case "time_hh":
                             if (pos < -38) {
                                 pos = -38;
-                                stopGear = true;
+                                setDuration();
                             }
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
@@ -658,7 +660,7 @@ window.LCalendar = (function() {
                         case "time_mm":
                             if (pos < -110) {
                                 pos = -110;
-                                stopGear = true;
+                                setDuration();
                             }
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
