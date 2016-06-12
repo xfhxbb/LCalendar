@@ -1,19 +1,3 @@
-/*
- * LCalendar日期控件
- * 
- * 作者：黄磊
- * 
- * 项目地址：https://github.com/xfhxbb/LCalendar
- * 
- * 报告漏洞，意见或建议, 请联系邮箱：xfhxbb@yeah.net
- * 
- * 创建于：2016年2月8日
- * 
- * Copyright 2016
- *
- * 获得使用本类库的许可, 您必须保留著作权声明信息。
- *
- */
 window.LCalendar = (function() {
     var MobileCalendar = function() {
         this.gearDate;
@@ -520,7 +504,7 @@ window.LCalendar = (function() {
                 }
                 target["new_" + target.id] = e.targetTouches[0].screenY;
                 target["n_t_" + target.id] = (new Date()).getTime();
-                var f = (target["new_" + target.id] - target["old_" + target.id]) * 9 / window.innerHeight;
+                var f = (target["new_" + target.id] - target["old_" + target.id]) * 30 / window.innerHeight;
                 target["pos_" + target.id] = target["o_d_" + target.id] + f;
                 target.style["-webkit-transform"] = 'translate3d(0,' + target["pos_" + target.id] + 'em,0)';
                 target.setAttribute('top', target["pos_" + target.id] + 'em');
@@ -689,10 +673,19 @@ window.LCalendar = (function() {
             //取消
             function closeMobileCalendar(e) {
                 e.preventDefault();
-                var evt = new CustomEvent('input');
+                var evt;
+                try {
+                    evt = new CustomEvent('input');
+                } catch (e) {
+                    //兼容旧浏览器(注意：该方法已从最新的web标准中删除)
+                    evt = document.createEvent('Event');
+                    evt.initEvent('input', true, true);
+                }
                 _self.trigger.dispatchEvent(evt);
                 document.body.removeChild(_self.gearDate);
+                _self.gearDate=null;
             }
+
             //日期确认
             function finishMobileDate(e) {
                 var passY = _self.maxY - _self.minY + 1;
