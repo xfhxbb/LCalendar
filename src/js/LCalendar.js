@@ -533,6 +533,9 @@ window.LCalendar = (function() {
                         target["spd_" + target.id] = flag / 2;
                     }
                 }
+                if (!target["new_" + target.id] || !target["n_t_" + target.id]) {
+                    target["spd_" + target.id] = 0;
+                }
                 if (!target["pos_" + target.id]) {
                     target["pos_" + target.id] = 0;
                 }
