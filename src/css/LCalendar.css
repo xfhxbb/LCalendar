@@ -10,6 +10,7 @@
     height: 100%;
     z-index: 9900;
     overflow: hidden;
+    -webkit-animation-fill-mode: both;
     animation-fill-mode: both
 }
 
@@ -25,26 +26,45 @@
     bottom: 0;
     z-index: 9901;
     overflow: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0)
 }
 
 .slideInUp {
-    animation: slideInUp .3s;
+    -webkit-animation: slideInUp .3s;
+            animation: slideInUp .3s;
+}
+
+@-webkit-keyframes slideInUp {
+    from {
+        -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0)
+    }
 }
 
 @keyframes slideInUp {
     from {
-        transform: translate3d(0, 100%, 0)
+        -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0)
     }
     to {
-        transform: translate3d(0, 0, 0)
+        -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0)
     }
 }
 
+.y_roll,
 .ym_roll,
 .date_roll,
 .datetime_roll,
 .time_roll {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     width: 100%;
     height: auto;
@@ -54,6 +74,7 @@
     -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0))
 }
 
+.y_roll>div,
 .ym_roll>div,
 .date_roll>div,
 .datetime_roll>div,
@@ -64,9 +85,12 @@
     background-color: transparent;
     position: relative;
     overflow: hidden;
-    flex: 4
+    -webkit-box-flex: 4;
+    -webkit-flex: 4;
+        -ms-flex: 4;
+            flex: 4
 }
-
+.y_roll>div .gear,
 .ym_roll>div .gear,
 .date_roll>div .gear,
 .datetime_roll>div .gear,
@@ -85,20 +109,32 @@
 }
 
 .date_roll>div:nth-child(2) {
-    flex: 2
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+        -ms-flex: 2;
+            flex: 2
 }
 
 .date_roll>div:nth-child(1),
 .datetime_roll>div:nth-child(1) {
-    flex: 4
+    -webkit-box-flex: 4;
+    -webkit-flex: 4;
+        -ms-flex: 4;
+            flex: 4
 }
 
 .datetime_roll>div:first-child {
-    flex: 6
+    -webkit-box-flex: 6;
+    -webkit-flex: 6;
+        -ms-flex: 6;
+            flex: 6
 }
 
 .datetime_roll>div:last-child {
-    flex: 6
+    -webkit-box-flex: 6;
+    -webkit-flex: 6;
+        -ms-flex: 6;
+            flex: 6
 }
 
 .date_grid {
@@ -169,13 +205,23 @@
     display: block;
     background-color: #96979b;
     z-index: 15;
-    transform: scaleY(0.33)
+    -webkit-transform: scaleY(0.33);
+            transform: scaleY(0.33)
 }
 
 .date_btn_box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
     background-color: #f1f2f4;
     position: relative
 }
@@ -183,13 +229,15 @@
 .date_btn_box:before {
     left: 0;
     top: 0;
-    transform-origin: 50% 20%
+    -webkit-transform-origin: 50% 20%;
+            transform-origin: 50% 20%
 }
 
 .date_btn_box:after {
     left: 0;
     bottom: 0;
-    transform-origin: 50% 70%
+    -webkit-transform-origin: 50% 70%;
+            transform-origin: 50% 70%
 }
 
 .date_roll>div:nth-child(1) .gear {
@@ -227,6 +275,20 @@
 .time_roll>div:nth-child(1) .gear {
     width: 100%;
     text-indent: 10%
+}
+
+.y_roll>div .gear,
+.time_roll>div .gear {
+    width: 100%;
+}
+
+.y_roll>div:nth-child(1) .gear,
+.time_roll>div:nth-child(1) .gear {
+    width: 100%;
+}
+
+.y_roll .date_grid>div{
+    left:65%;
 }
 
 .tooth {

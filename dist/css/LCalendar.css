@@ -26,7 +26,7 @@
     z-index: 9900;
     overflow: hidden;
     -webkit-animation-fill-mode: both;
-            animation-fill-mode: both
+    animation-fill-mode: both
 }
 
 .date_ctrl {
@@ -42,7 +42,7 @@
     z-index: 9901;
     overflow: hidden;
     -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0)
+    transform: translate3d(0, 0, 0)
 }
 
 .slideInUp {
@@ -72,6 +72,7 @@
     }
 }
 
+.y_roll,
 .ym_roll,
 .date_roll,
 .datetime_roll,
@@ -88,6 +89,7 @@
     -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0))
 }
 
+.y_roll>div,
 .ym_roll>div,
 .date_roll>div,
 .datetime_roll>div,
@@ -103,7 +105,7 @@
         -ms-flex: 4;
             flex: 4
 }
-
+.y_roll>div .gear,
 .ym_roll>div .gear,
 .date_roll>div .gear,
 .datetime_roll>div .gear,
@@ -290,8 +292,23 @@
     text-indent: 10%
 }
 
+.y_roll>div .gear,
+.time_roll>div .gear {
+    width: 100%;
+}
+
+.y_roll>div:nth-child(1) .gear,
+.time_roll>div:nth-child(1) .gear {
+    width: 100%;
+}
+
+.y_roll .date_grid>div{
+    left:65%;
+}
+
 .tooth {
     height: 2em;
     line-height: 2em;
     text-align: center
 }
+
