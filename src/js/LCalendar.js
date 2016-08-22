@@ -170,10 +170,61 @@ window.LCalendar = (function() {
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
                 setDateGearTooth();
             }
+            //呼出年插件
+            function popupY(e) {
+                _self.gearDate = document.createElement("div");
+                _self.gearDate.className = "gearDate";
+                _self.gearDate.innerHTML = '<div class="date_ctrl slideInUp">' +
+                    '<div class="date_btn_box">' +
+                    '<div class="date_btn lcalendar_cancel">取消</div>' +
+                    '<div class="date_btn lcalendar_finish">确定</div>' +
+                    '</div>' +
+                    '<div class="date_roll_mask">' +
+                    '<div class="y_roll">' +
+                    '<div>' +
+                    '<div class="gear date_yy" data-datetype="date_yy"></div>' +
+                    '<div class="date_grid">' +
+                    '<div ">年</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                document.body.appendChild(_self.gearDate);
+                yCtrlInit();
+                var lcalendar_cancel = _self.gearDate.querySelector(".lcalendar_cancel");
+                lcalendar_cancel.addEventListener('touchstart', closeMobileCalendar);
+                var lcalendar_finish = _self.gearDate.querySelector(".lcalendar_finish");
+                lcalendar_finish.addEventListener('touchstart', finishMobileY);
+                var date_yy = _self.gearDate.querySelector(".date_yy");
+                //var date_mm = _self.gearDate.querySelector(".date_mm");
+                date_yy.addEventListener('touchstart', gearTouchStart);
+                //date_mm.addEventListener('touchstart', gearTouchStart);
+                date_yy.addEventListener('touchmove', gearTouchMove);
+                //date_mm.addEventListener('touchmove', gearTouchMove);
+                date_yy.addEventListener('touchend', gearTouchEnd);
+                //date_mm.addEventListener('touchend', gearTouchEnd);
+            }
+            //初始化年插件,guog
+            function yCtrlInit() {
+                var date = new Date();
+                var dateArr = {
+                    yy: date.getFullYear()
+                };
+                if (/^\d{4}$/.test(_self.trigger.value)) {
+                    rs = _self.trigger.value.match(/\d{1,4}/g);
+                    dateArr.yy = rs[0] - _self.minY;
+                } else {
+                    dateArr.yy = dateArr.yy - _self.minY;
+                }
+                _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
+                //_self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
+                setDateGearTooth();
+            }
             //呼出日期+时间插件
             function popupDateTime(e) {
                 _self.gearDate = document.createElement("div");
-                _self.gearDate.className = "gearDatetime";
+                _self.gearDate.className = "gearDate";//修正日期+时间选择遮罩层bug
                 _self.gearDate.innerHTML = '<div class="date_ctrl slideInUp">' +
                     '<div class="date_btn_box">' +
                     '<div class="date_btn lcalendar_cancel">取消</div>' +
@@ -329,6 +380,12 @@ window.LCalendar = (function() {
             //重置日期节点个数
             function setDateGearTooth() {
                 var passY = _self.maxY - _self.minY + 1;
+
+                //当滚动效果未结束时点击取消或确定报错
+                if (_self.gearDate == null) {
+                    return;
+                }
+
                 var date_yy = _self.gearDate.querySelector(".date_yy");
                 var itemStr = "";
                 if (date_yy && date_yy.getAttribute("val")) {
@@ -425,6 +482,10 @@ window.LCalendar = (function() {
             }
             //重置时间节点个数
             function setTimeGearTooth() {
+                //修复当滚动效果未结束时点击取消或确定报错
+                if (_self.gearDate == null) {
+                    return;
+                }
                 var time_hh = _self.gearDate.querySelector(".time_hh");
                 if (time_hh && time_hh.getAttribute("val")) {
                     var i = "";
@@ -533,6 +594,10 @@ window.LCalendar = (function() {
                         target["spd_" + target.id] = flag / 2;
                     }
                 }
+                //弹出选择框后，不拖动日期，直接点击，会出现选择的日期变为NaN
+                if (!target["new_" + target.id] || !target["n_t_" + target.id]) {
+                    target["spd_" + target.id] = 0;
+                }
                 if (!target["pos_" + target.id]) {
                     target["pos_" + target.id] = 0;
                 }
@@ -549,7 +614,11 @@ window.LCalendar = (function() {
                 }
                 var passY = _self.maxY - _self.minY + 1;
                 clearInterval(target["int_" + target.id]);
-                target["int_" + target.id] = setInterval(function() {
+                target["int_" + target.id] = setInterval(function () {
+                    //修复当滚动效果未结束时点击取消或确定报错
+                    if (_self.gearDate == null) {
+                        return;
+                    }
                     var pos = target["pos_" + target.id];
                     var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
                     pos += speed;
@@ -706,6 +775,14 @@ window.LCalendar = (function() {
                 _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm;
                 closeMobileCalendar(e);
             }
+            //年确认
+            function finishMobileY(e) {
+                var passY = _self.maxY - _self.minY + 1;
+                var date_yy = parseInt(Math.round(_self.gearDate.querySelector(".date_yy").getAttribute("val")));
+                _self.trigger.value = (date_yy % passY + _self.minY);
+                closeMobileCalendar(e);
+            }
+
             //日期时间确认
             function finishMobileDateTime(e) {
                 var passY = _self.maxY - _self.minY + 1;
@@ -730,7 +807,8 @@ window.LCalendar = (function() {
                 _self.trigger.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
                 closeMobileCalendar(e);
             }
-            _self.trigger.addEventListener('click', {
+            _self.trigger.addEventListener('touchend', {//click事件在移动端浏览器中(ios9.3.4)，第一次点击后不切换焦点时，不能呼出选择框
+                "y": popupY,
                 "ym": popupYM,
                 "date": popupDate,
                 "datetime": popupDateTime,
@@ -739,4 +817,4 @@ window.LCalendar = (function() {
         }
     }
     return MobileCalendar;
-})()
+})();
