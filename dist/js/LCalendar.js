@@ -12,6 +12,11 @@
  * Licensed under MIT
  * 
  * 最近修改于： 2016-6-12 17:22:20
+ *
+ * Author: Nutlee;
+ *
+ * 最近修改于： 2016-8-30
+ * 
  */
 window.LCalendar = (function() {
     var MobileCalendar = function() {
@@ -50,10 +55,19 @@ window.LCalendar = (function() {
                 this.maxM = ~~maxArr[1];
                 this.maxD = ~~maxArr[2];
             }
+            this.successCallback = params.successCallback || function(){};
             this.bindEvent(this.type);
+            return this;
         },
         bindEvent: function(type) {
             var _self = this;
+            // 绑定一次事件 收起控件
+            function bindEventToucheOut(e) {
+                _self.gearDate.addEventListener('click',function(e){
+                    e.target.removeEventListener(e.type,arguments.callee);
+                    return gearTouchOut(e,document.querySelector('.date_ctrl'));
+                }); 
+            }
             //呼出日期插件
             function popupDate(e) {
                 _self.gearDate = document.createElement("div");
@@ -104,6 +118,7 @@ window.LCalendar = (function() {
                 date_yy.addEventListener('touchend', gearTouchEnd);
                 date_mm.addEventListener('touchend', gearTouchEnd);
                 date_dd.addEventListener('touchend', gearTouchEnd);
+                bindEventToucheOut(e);
             }
             //初始化年月日插件默认值
             function dateCtrlInit() {
@@ -166,6 +181,7 @@ window.LCalendar = (function() {
                 date_mm.addEventListener('touchmove', gearTouchMove);
                 date_yy.addEventListener('touchend', gearTouchEnd);
                 date_mm.addEventListener('touchend', gearTouchEnd);
+                bindEventToucheOut(e);
             }
             //初始化年月插件默认值
             function ymCtrlInit() {
@@ -255,6 +271,7 @@ window.LCalendar = (function() {
                 date_dd.addEventListener('touchend', gearTouchEnd);
                 time_hh.addEventListener('touchend', gearTouchEnd);
                 time_mm.addEventListener('touchend', gearTouchEnd);
+                bindEventToucheOut(e);
             }
             //初始化年月日时分插件默认值
             function dateTimeCtrlInit() {
@@ -324,6 +341,7 @@ window.LCalendar = (function() {
                 time_mm.addEventListener('touchmove', gearTouchMove);
                 time_hh.addEventListener('touchend', gearTouchEnd);
                 time_mm.addEventListener('touchend', gearTouchEnd);
+                bindEventToucheOut(e);
             }
             //初始化时分插件默认值
             function timeCtrlInit() {
@@ -710,6 +728,7 @@ window.LCalendar = (function() {
                 var date_dd = parseInt(Math.round(_self.gearDate.querySelector(".date_dd").getAttribute("val"))) + 1;
                 date_dd = date_dd > 9 ? date_dd : '0' + date_dd;
                 _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm + "-" + date_dd;
+                _self.successCallback(_self.trigger.value);
                 closeMobileCalendar(e);
             }
             //年月确认
@@ -719,6 +738,7 @@ window.LCalendar = (function() {
                 var date_mm = parseInt(Math.round(_self.gearDate.querySelector(".date_mm").getAttribute("val"))) + 1;
                 date_mm = date_mm > 9 ? date_mm : '0' + date_mm;
                 _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm;
+                _self.successCallback(_self.trigger.value);
                 closeMobileCalendar(e);
             }
             //日期时间确认
@@ -734,6 +754,7 @@ window.LCalendar = (function() {
                 var time_mm = parseInt(Math.round(_self.gearDate.querySelector(".time_mm").getAttribute("val")));
                 time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
                 _self.trigger.value = (date_yy % passY + _self.minY) + "-" + date_mm + "-" + date_dd + " " + (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
+                _self.successCallback(_self.trigger.value);
                 closeMobileCalendar(e);
             }
             //时间确认
@@ -743,8 +764,29 @@ window.LCalendar = (function() {
                 var time_mm = parseInt(Math.round(_self.gearDate.querySelector(".time_mm").getAttribute("val")));
                 time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
                 _self.trigger.value = (time_hh.length < 2 ? "0" : "") + time_hh + (time_mm.length < 2 ? ":0" : ":") + time_mm;
+                _self.successCallback(_self.trigger.value);
                 closeMobileCalendar(e);
             }
+            //移出时关闭时间控件
+            function gearTouchOut(event,parent) {
+                function hasThisElement(child,parent) {
+                    if (parent === child) {
+                        return true;
+                    };
+                    var nodes = parent.getElementsByTagName('*');
+                    for (var i = 0,len = nodes.length; i < len; i++) {
+                        if (nodes[i] === child) {
+                            return true;
+                        };
+                    };
+                    return false;
+                };
+                var event = event ? event :window.event;
+                    target = event.target || event.scrElement;
+                if (!hasThisElement(target,parent)) {
+                    closeMobileCalendar(event);
+                }
+            };
             _self.trigger.addEventListener('click', {
                 "ym": popupYM,
                 "date": popupDate,
