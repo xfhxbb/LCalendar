@@ -12,8 +12,12 @@
  * Licensed under MIT
  * 
  * 最近修改于： 2016-6-12 17:22:20
+ *
+ * Author: Nutlee;
+ *
+ * 最近修改于： 2016-8-30
  */
-.gearDate {
+.gearDate, .gearDatetime {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 10px;
     background-color: rgba(0, 0, 0, 0.2);
