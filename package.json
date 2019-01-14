@@ -1,0 +1,28 @@
+{
+  "name": "LCalendar",
+  "version": "2.0",
+  "description": "移动端日期时间选择控件",
+  "email": "xfhxbb@yeah.net",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xfhxbb/LCalendar"
+  },
+  "author": "lennyhuang",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.8.2",
+    "gulp-jshint": "^2.0.1",
+    "gulp-preprocess": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^7.1.2",
+    "gulp-rev-collector": "^1.2.3",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.9.3",
+    "jshint-stylish": "^2.2.1",
+    "run-sequence": "^1.2.2"
+  }
+}

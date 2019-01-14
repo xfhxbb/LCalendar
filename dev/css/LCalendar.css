@@ -1,19 +1,5 @@
-/**
- * LCalendar移动端日期时间选择控件
- * 
- * version:1.7.1
- * 
- * author:黄磊
- * 
- * git:https://github.com/xfhxbb/LCalendar
- * 
- * Copyright 2016
- * 
- * Licensed under MIT
- * 
- * 最近修改于： 2016-6-12 17:22:20
- */
-.gearDate {
+.gearDate,
+.gearDatetime {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 10px;
     background-color: rgba(0, 0, 0, 0.2);
@@ -25,8 +11,7 @@
     height: 100%;
     z-index: 9900;
     overflow: hidden;
-    -webkit-animation-fill-mode: both;
-            animation-fill-mode: both
+    animation-fill-mode: both
 }
 
 .date_ctrl {
@@ -41,34 +26,19 @@
     bottom: 0;
     z-index: 9901;
     overflow: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0)
+    transform: translate3d(0, 0, 0)
 }
 
 .slideInUp {
-    -webkit-animation: slideInUp .3s;
-            animation: slideInUp .3s;
-}
-
-@-webkit-keyframes slideInUp {
-    from {
-        -webkit-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
-    }
-    to {
-        -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0)
-    }
+    animation: slideInUp .3s;
 }
 
 @keyframes slideInUp {
     from {
-        -webkit-transform: translate3d(0, 100%, 0);
-                transform: translate3d(0, 100%, 0)
+        transform: translate3d(0, 100%, 0)
     }
     to {
-        -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0)
+        transform: translate3d(0, 0, 0)
     }
 }
 
@@ -76,9 +46,6 @@
 .date_roll,
 .datetime_roll,
 .time_roll {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
     width: 100%;
     height: auto;
@@ -98,10 +65,7 @@
     background-color: transparent;
     position: relative;
     overflow: hidden;
-    -webkit-box-flex: 4;
-    -webkit-flex: 4;
-        -ms-flex: 4;
-            flex: 4
+    flex: 4
 }
 
 .ym_roll>div .gear,
@@ -122,32 +86,20 @@
 }
 
 .date_roll>div:nth-child(2) {
-    -webkit-box-flex: 2;
-    -webkit-flex: 2;
-        -ms-flex: 2;
-            flex: 2
+    flex: 2
 }
 
 .date_roll>div:nth-child(1),
 .datetime_roll>div:nth-child(1) {
-    -webkit-box-flex: 4;
-    -webkit-flex: 4;
-        -ms-flex: 4;
-            flex: 4
+    flex: 4
 }
 
 .datetime_roll>div:first-child {
-    -webkit-box-flex: 6;
-    -webkit-flex: 6;
-        -ms-flex: 6;
-            flex: 6
+    flex: 6
 }
 
 .datetime_roll>div:last-child {
-    -webkit-box-flex: 6;
-    -webkit-flex: 6;
-        -ms-flex: 6;
-            flex: 6
+    flex: 6
 }
 
 .date_grid {
@@ -218,23 +170,13 @@
     display: block;
     background-color: #96979b;
     z-index: 15;
-    -webkit-transform: scaleY(0.33);
-            transform: scaleY(0.33)
+    transform: scaleY(0.33)
 }
 
 .date_btn_box {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: stretch;
-    -webkit-align-items: stretch;
-        -ms-flex-align: stretch;
-            align-items: stretch;
+    justify-content: space-between;
+    align-items: stretch;
     background-color: #f1f2f4;
     position: relative
 }
@@ -242,15 +184,13 @@
 .date_btn_box:before {
     left: 0;
     top: 0;
-    -webkit-transform-origin: 50% 20%;
-            transform-origin: 50% 20%
+    transform-origin: 50% 20%
 }
 
 .date_btn_box:after {
     left: 0;
     bottom: 0;
-    -webkit-transform-origin: 50% 70%;
-            transform-origin: 50% 70%
+    transform-origin: 50% 70%
 }
 
 .date_roll>div:nth-child(1) .gear {

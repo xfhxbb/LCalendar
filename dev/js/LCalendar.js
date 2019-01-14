@@ -1,18 +1,3 @@
-/**
- * LCalendar移动端日期时间选择控件
- * 
- * version:1.7.1
- * 
- * author:黄磊
- * 
- * git:https://github.com/xfhxbb/LCalendar
- * 
- * Copyright 2016
- * 
- * Licensed under MIT
- * 
- * 最近修改于： 2016-6-12 17:22:20
- */
 window.LCalendar = (function() {
     var MobileCalendar = function() {
         this.gearDate;
@@ -343,6 +328,7 @@ window.LCalendar = (function() {
             }
             //重置日期节点个数
             function setDateGearTooth() {
+                var newY = new Date().getFullYear();
                 var passY = _self.maxY - _self.minY + 1;
                 var date_yy = _self.gearDate.querySelector(".date_yy");
                 var itemStr = "";
@@ -365,6 +351,13 @@ window.LCalendar = (function() {
                         yyVal = Math.abs(top - 8) / 2;
                         date_yy.setAttribute("val", yyVal);
                     } else {
+                        var minTop = 8 - (passY - 1) * 2;
+                        var gearVal = Math.abs(minTop - 8) / 2;
+                        if (_self.maxY < newY) {
+                            yyVal > gearVal && (yyVal = gearVal);
+                        } else if (_self.minY > newY) {
+                            yyVal < gearVal && (yyVal = gearVal);
+                        }
                         date_yy.style["-webkit-transform"] = 'translate3d(0,' + (8 - yyVal * 2) + 'em,0)';
                         date_yy.setAttribute('top', 8 - yyVal * 2 + 'em');
                     }
@@ -391,13 +384,21 @@ window.LCalendar = (function() {
                         itemStr += "<div class='tooth'>" + (minM + p + 1) + "</div>";
                     }
                     date_mm.innerHTML = itemStr;
-                    if (mmVal > maxM) {
-                        mmVal = maxM;
-                        date_mm.setAttribute("val", mmVal);
-                    } else if (mmVal < minM) {
-                        mmVal = maxM;
-                        date_mm.setAttribute("val", mmVal);
+                    var top = Math.floor(parseFloat(date_mm.getAttribute('top')));
+                    if (!isNaN(top)) {
+                        if (mmVal > maxM) {
+                            mmVal = maxM;
+                        } else if (mmVal < minM) {
+                            mmVal = maxM;
+                        }
+                    } else {
+                        if (mmVal > maxM || (_self.maxY < newY && !_self.trigger.value)) {
+                            mmVal = maxM;
+                        } else if (mmVal < minM || (_self.minY > newY && !_self.trigger.value)) {
+                            mmVal = maxM;
+                        }
                     }
+                    date_mm.setAttribute("val", mmVal);
                     date_mm.style["-webkit-transform"] = 'translate3d(0,' + (8 - (mmVal - minM) * 2) + 'em,0)';
                     date_mm.setAttribute('top', 8 - (mmVal - minM) * 2 + 'em');
                 } else {
@@ -425,13 +426,21 @@ window.LCalendar = (function() {
                         itemStr += "<div class='tooth'>" + (minD + p + 1) + "</div>";
                     }
                     date_dd.innerHTML = itemStr;
-                    if (ddVal > maxD) {
-                        ddVal = maxD;
-                        date_dd.setAttribute("val", ddVal);
-                    } else if (ddVal < minD) {
-                        ddVal = minD;
-                        date_dd.setAttribute("val", ddVal);
+                    var top = Math.floor(parseFloat(date_dd.getAttribute('top')));
+                    if (!isNaN(top)) {
+                        if (ddVal > maxD) {
+                            ddVal = maxD;
+                        } else if (ddVal < minD) {
+                            ddVal = minD;
+                        }
+                    } else {
+                        if (ddVal > maxD || (_self.maxY < newY && !_self.trigger.value)) {
+                            ddVal = maxD;
+                        } else if (ddVal < minD || (_self.minY > newY && !_self.trigger.value)) {
+                            ddVal = maxD;
+                        }
                     }
+                    date_dd.setAttribute("val", ddVal);
                     date_dd.style["-webkit-transform"] = 'translate3d(0,' + (8 - (ddVal - minD) * 2) + 'em,0)';
                     date_dd.setAttribute('top', 8 - (ddVal - minD) * 2 + 'em');
                 } else {
@@ -464,7 +473,7 @@ window.LCalendar = (function() {
                     time_mm.style["-webkit-transform"] = 'translate3d(0,' + (8 - mmVal * 2) + 'em,0)';
                     time_mm.setAttribute('top', 8 - mmVal * 2 + 'em');
                 } else {
-                    return
+                    return;
                 }
             }
             //求月份最大天数
@@ -492,7 +501,7 @@ window.LCalendar = (function() {
                     if (!target.classList.contains("gear")) {
                         target = target.parentElement;
                     } else {
-                        break
+                        break;
                     }
                 }
                 clearInterval(target["int_" + target.id]);
@@ -514,7 +523,7 @@ window.LCalendar = (function() {
                     if (!target.classList.contains("gear")) {
                         target = target.parentElement;
                     } else {
-                        break
+                        break;
                     }
                 }
                 target["new_" + target.id] = e.targetTouches[0].screenY;
@@ -525,7 +534,7 @@ window.LCalendar = (function() {
                 target.setAttribute('top', target["pos_" + target.id] + 'em');
                 if (e.targetTouches[0].screenY < 1) {
                     gearTouchEnd(e);
-                };
+                }
             }
             //离开屏幕
             function gearTouchEnd(e) {
@@ -565,6 +574,10 @@ window.LCalendar = (function() {
                 var passY = _self.maxY - _self.minY + 1;
                 clearInterval(target["int_" + target.id]);
                 target["int_" + target.id] = setInterval(function() {
+                    if (!_self.gearDate) {
+                        clearInterval(target["int_" + target.id]);
+                        return;
+                    }
                     var pos = target["pos_" + target.id];
                     var speed = target["spd_" + target.id] * Math.exp(-0.03 * d);
                     pos += speed;
@@ -677,12 +690,14 @@ window.LCalendar = (function() {
             }
             //控制插件滚动后停留的值
             function setGear(target, val) {
-                val = Math.round(val);
-                target.setAttribute("val", val);
-                if (/date/.test(target.dataset.datetype)) {
-                    setDateGearTooth();
-                } else {
-                    setTimeGearTooth();
+                if (_self.gearDate !== null && !isNaN(val)) {
+                    val = Math.round(val);
+                    target.setAttribute("val", val);
+                    if (/date/.test(target.dataset.datetype)) {
+                        setDateGearTooth();
+                    } else {
+                        setTimeGearTooth();
+                    }
                 }
             }
             //取消
@@ -698,7 +713,7 @@ window.LCalendar = (function() {
                 }
                 _self.trigger.dispatchEvent(evt);
                 document.body.removeChild(_self.gearDate);
-                _self.gearDate=null;
+                _self.gearDate = null;
             }
 
             //日期确认
