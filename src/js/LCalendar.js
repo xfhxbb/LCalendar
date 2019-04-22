@@ -98,11 +98,11 @@ window.LCalendar = (function() {
                     mm: date.getMonth(),
                     dd: date.getDate() - 1
                 };
-                if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(_self.trigger.value)) {
+                if (/^\d{4}年\d{1,2}月\d{1,2}日$/.test(_self.trigger.value)) {
                     rs = _self.trigger.value.match(/(^|-)\d{1,4}/g);
                     dateArr.yy = rs[0] - _self.minY;
-                    dateArr.mm = rs[1].replace(/-/g, "") - 1;
-                    dateArr.dd = rs[2].replace(/-/g, "") - 1;
+                    dateArr.mm = rs[1] - 1;
+                    dateArr.dd = rs[2] - 1;
                 } else {
                     dateArr.yy = dateArr.yy - _self.minY;
                 }
