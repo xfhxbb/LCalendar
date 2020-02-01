@@ -7,6 +7,7 @@ window.LCalendar = (function() {
         this.maxY = 2099;
         this.maxM = 12;
         this.maxD = 31;
+        this.isTouch = false;
     }
     MobileCalendar.prototype = {
         init: function(params) {
@@ -39,6 +40,13 @@ window.LCalendar = (function() {
         },
         bindEvent: function(type) {
             var _self = this;
+            function isMobile() {
+                if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
             //呼出日期插件
             function popupDate(e) {
                 _self.gearDate = document.createElement("div");
@@ -74,21 +82,15 @@ window.LCalendar = (function() {
                 document.body.appendChild(_self.gearDate);
                 dateCtrlInit();
                 var lcalendar_cancel = _self.gearDate.querySelector(".lcalendar_cancel");
-                lcalendar_cancel.addEventListener('touchstart', closeMobileCalendar);
+                lcalendar_cancel.addEventListener('click', closeMobileCalendar);
                 var lcalendar_finish = _self.gearDate.querySelector(".lcalendar_finish");
-                lcalendar_finish.addEventListener('touchstart', finishMobileDate);
+                lcalendar_finish.addEventListener('click', finishMobileDate);
                 var date_yy = _self.gearDate.querySelector(".date_yy");
                 var date_mm = _self.gearDate.querySelector(".date_mm");
                 var date_dd = _self.gearDate.querySelector(".date_dd");
-                date_yy.addEventListener('touchstart', gearTouchStart);
-                date_mm.addEventListener('touchstart', gearTouchStart);
-                date_dd.addEventListener('touchstart', gearTouchStart);
-                date_yy.addEventListener('touchmove', gearTouchMove);
-                date_mm.addEventListener('touchmove', gearTouchMove);
-                date_dd.addEventListener('touchmove', gearTouchMove);
-                date_yy.addEventListener('touchend', gearTouchEnd);
-                date_mm.addEventListener('touchend', gearTouchEnd);
-                date_dd.addEventListener('touchend', gearTouchEnd);
+                eventListener(date_yy);
+                eventListener(date_mm);
+                eventListener(date_dd);
             }
             //初始化年月日插件默认值
             function dateCtrlInit() {
@@ -106,6 +108,7 @@ window.LCalendar = (function() {
                 } else {
                     dateArr.yy = dateArr.yy - _self.minY;
                 }
+                antiClickPenetration();
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
                 _self.gearDate.querySelector(".date_dd").setAttribute("val", dateArr.dd);
@@ -140,17 +143,14 @@ window.LCalendar = (function() {
                 document.body.appendChild(_self.gearDate);
                 ymCtrlInit();
                 var lcalendar_cancel = _self.gearDate.querySelector(".lcalendar_cancel");
-                lcalendar_cancel.addEventListener('touchstart', closeMobileCalendar);
+                lcalendar_cancel.addEventListener('click', closeMobileCalendar);
                 var lcalendar_finish = _self.gearDate.querySelector(".lcalendar_finish");
-                lcalendar_finish.addEventListener('touchstart', finishMobileYM);
+                lcalendar_finish.addEventListener('click', finishMobileYM);
+
                 var date_yy = _self.gearDate.querySelector(".date_yy");
                 var date_mm = _self.gearDate.querySelector(".date_mm");
-                date_yy.addEventListener('touchstart', gearTouchStart);
-                date_mm.addEventListener('touchstart', gearTouchStart);
-                date_yy.addEventListener('touchmove', gearTouchMove);
-                date_mm.addEventListener('touchmove', gearTouchMove);
-                date_yy.addEventListener('touchend', gearTouchEnd);
-                date_mm.addEventListener('touchend', gearTouchEnd);
+                eventListener(date_yy);
+                eventListener(date_mm);
             }
             //初始化年月插件默认值
             function ymCtrlInit() {
@@ -166,6 +166,7 @@ window.LCalendar = (function() {
                 } else {
                     dateArr.yy = dateArr.yy - _self.minY;
                 }
+                antiClickPenetration();
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
                 setDateGearTooth();
@@ -217,29 +218,19 @@ window.LCalendar = (function() {
                 document.body.appendChild(_self.gearDate);
                 dateTimeCtrlInit();
                 var lcalendar_cancel = _self.gearDate.querySelector(".lcalendar_cancel");
-                lcalendar_cancel.addEventListener('touchstart', closeMobileCalendar);
+                lcalendar_cancel.addEventListener('click', closeMobileCalendar);
                 var lcalendar_finish = _self.gearDate.querySelector(".lcalendar_finish");
-                lcalendar_finish.addEventListener('touchstart', finishMobileDateTime);
+                lcalendar_finish.addEventListener('click', finishMobileDateTime);
                 var date_yy = _self.gearDate.querySelector(".date_yy");
                 var date_mm = _self.gearDate.querySelector(".date_mm");
                 var date_dd = _self.gearDate.querySelector(".date_dd");
                 var time_hh = _self.gearDate.querySelector(".time_hh");
                 var time_mm = _self.gearDate.querySelector(".time_mm");
-                date_yy.addEventListener('touchstart', gearTouchStart);
-                date_mm.addEventListener('touchstart', gearTouchStart);
-                date_dd.addEventListener('touchstart', gearTouchStart);
-                time_hh.addEventListener('touchstart', gearTouchStart);
-                time_mm.addEventListener('touchstart', gearTouchStart);
-                date_yy.addEventListener('touchmove', gearTouchMove);
-                date_mm.addEventListener('touchmove', gearTouchMove);
-                date_dd.addEventListener('touchmove', gearTouchMove);
-                time_hh.addEventListener('touchmove', gearTouchMove);
-                time_mm.addEventListener('touchmove', gearTouchMove);
-                date_yy.addEventListener('touchend', gearTouchEnd);
-                date_mm.addEventListener('touchend', gearTouchEnd);
-                date_dd.addEventListener('touchend', gearTouchEnd);
-                time_hh.addEventListener('touchend', gearTouchEnd);
-                time_mm.addEventListener('touchend', gearTouchEnd);
+                eventListener(date_yy);
+                eventListener(date_mm);
+                eventListener(date_dd);
+                eventListener(time_hh);
+                eventListener(time_mm);
             }
             //初始化年月日时分插件默认值
             function dateTimeCtrlInit() {
@@ -261,6 +252,7 @@ window.LCalendar = (function() {
                 } else {
                     dateArr.yy = dateArr.yy - _self.minY;
                 }
+                antiClickPenetration();
                 _self.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
                 _self.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
                 _self.gearDate.querySelector(".date_dd").setAttribute("val", dateArr.dd);
@@ -298,17 +290,14 @@ window.LCalendar = (function() {
                 document.body.appendChild(_self.gearDate);
                 timeCtrlInit();
                 var lcalendar_cancel = _self.gearDate.querySelector(".lcalendar_cancel");
-                lcalendar_cancel.addEventListener('touchstart', closeMobileCalendar);
+                lcalendar_cancel.addEventListener('click', closeMobileCalendar);
                 var lcalendar_finish = _self.gearDate.querySelector(".lcalendar_finish");
-                lcalendar_finish.addEventListener('touchstart', finishMobileTime);
+                lcalendar_finish.addEventListener('click', finishMobileTime);
+
                 var time_hh = _self.gearDate.querySelector(".time_hh");
                 var time_mm = _self.gearDate.querySelector(".time_mm");
-                time_hh.addEventListener('touchstart', gearTouchStart);
-                time_mm.addEventListener('touchstart', gearTouchStart);
-                time_hh.addEventListener('touchmove', gearTouchMove);
-                time_mm.addEventListener('touchmove', gearTouchMove);
-                time_hh.addEventListener('touchend', gearTouchEnd);
-                time_mm.addEventListener('touchend', gearTouchEnd);
+                eventListener(time_hh);
+                eventListener(time_mm);
             }
             //初始化时分插件默认值
             function timeCtrlInit() {
@@ -322,9 +311,58 @@ window.LCalendar = (function() {
                     e.hh = parseInt(rs[0].replace(/^0?/g, ""));
                     e.mm = parseInt(rs[1].replace(/:0?/g, ""))
                 }
+                antiClickPenetration();
                 _self.gearDate.querySelector(".time_hh").setAttribute("val", e.hh);
                 _self.gearDate.querySelector(".time_mm").setAttribute("val", e.mm);
                 setTimeGearTooth();
+            }
+            function antiClickPenetration() {
+                if (isMobile()) {
+                    _self.gearDate.addEventListener('touchmove', function(e) {
+                        e.preventDefault();//防止其他区域点击穿透
+                    });
+                } else {
+                    _self.gearDate.addEventListener('mousemove', function(e) {
+                        e.preventDefault();//防止其他区域点击穿透
+                    });
+                }
+            }
+            function eventListener(target)
+            {
+                var event = [
+                    'mousedown',
+                    'mousemove',
+                    'mouseout',
+                    'mouseup',
+                ];
+                if (isMobile()) {
+                    event[0] = 'touchstart';
+                    event[1] = 'touchmove';
+                    event[2] = 'touchend';
+                }
+
+                target.addEventListener(event[0], gearTouchStart);
+                target.addEventListener(event[1], gearTouchMove);
+                target.addEventListener(event[2], gearTouchEnd);
+
+                target.parentElement.addEventListener(event[0], function (e) {
+                    e.preventDefault();
+                    gearTouchStart(e, target);
+                });
+                target.parentElement.addEventListener(event[1], function (e) {
+                    e.preventDefault();
+                    gearTouchMove(e, target);
+                });
+                target.parentElement.addEventListener(event[2], function (e) {
+                    e.preventDefault();
+                    gearTouchEnd(e, target);
+                });
+                if (!isMobile()) {
+                    target.parentElement.addEventListener(event[3], function (e) {
+                        e.preventDefault();
+                        gearTouchEnd(e, target);
+                    });
+                }
             }
             //重置日期节点个数
             function setDateGearTooth() {
@@ -493,19 +531,26 @@ window.LCalendar = (function() {
                     }
                 }
             }
+            function getScreenY(e) {
+                if (isMobile()) {
+                    return e.targetTouches[0].screenY;
+                } else {
+                    return e.screenY;
+                }
+            }
             //触摸开始
-            function gearTouchStart(e) {
+            function gearTouchStart(e, _target = null) {
                 e.preventDefault();
-                var target = e.target;
+                var target = _target?_target:e.target;
                 while (true) {
                     if (!target.classList.contains("gear")) {
                         target = target.parentElement;
                     } else {
-                        break;
+                        break
                     }
                 }
                 clearInterval(target["int_" + target.id]);
-                target["old_" + target.id] = e.targetTouches[0].screenY;
+                target["old_" + target.id] = getScreenY(e);
                 target["o_t_" + target.id] = (new Date()).getTime();
                 var top = target.getAttribute('top');
                 if (top) {
@@ -514,32 +559,42 @@ window.LCalendar = (function() {
                     target["o_d_" + target.id] = 0;
                 }
                 target.style.webkitTransitionDuration = target.style.transitionDuration = '0ms';
+
+                _self.isTouch = true;
             }
             //手指移动
-            function gearTouchMove(e) {
+            function gearTouchMove(e, _target = null) {
                 e.preventDefault();
-                var target = e.target;
+                if (!isMobile() && !_self.isTouch) {
+                    return;
+                }
+                var target = _target?_target:e.target;
                 while (true) {
                     if (!target.classList.contains("gear")) {
                         target = target.parentElement;
                     } else {
-                        break;
+                        break
                     }
                 }
-                target["new_" + target.id] = e.targetTouches[0].screenY;
+                target["new_" + target.id] = getScreenY(e);
                 target["n_t_" + target.id] = (new Date()).getTime();
                 var f = (target["new_" + target.id] - target["old_" + target.id]) * 30 / window.innerHeight;
                 target["pos_" + target.id] = target["o_d_" + target.id] + f;
                 target.style["-webkit-transform"] = 'translate3d(0,' + target["pos_" + target.id] + 'em,0)';
                 target.setAttribute('top', target["pos_" + target.id] + 'em');
-                if (e.targetTouches[0].screenY < 1) {
+                if (getScreenY(e) < 1) {
                     gearTouchEnd(e);
-                }
+                };
             }
             //离开屏幕
-            function gearTouchEnd(e) {
+            function gearTouchEnd(e, _target = null) {
                 e.preventDefault();
-                var target = e.target;
+                var orgTouch = _self.isTouch;
+                _self.isTouch = false;
+                if (!orgTouch) {
+                    return;
+                }
+                var target = _target?_target:e.target;
                 while (true) {
                     if (!target.classList.contains("gear")) {
                         target = target.parentElement;
