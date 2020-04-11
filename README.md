@@ -33,3 +33,5 @@ calendar.init({
 ...
 ```
 调用起来非常简单，代码我后续会持续优化，如果喜欢希望赏颗星哦。
+
+在线预览：https://xfhxbb.github.io/LCalendar/public/html/index.html
