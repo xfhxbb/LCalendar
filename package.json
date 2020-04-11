@@ -1,7 +1,7 @@
 {
   "name": "LCalendar",
-  "version": "2.0",
-  "description": "移动端日期时间选择控件",
+  "version": "2.0.0",
+  "description": "移动端日期选择插件",
   "email": "xfhxbb@yeah.net",
   "homepage": "",
   "repository": {
@@ -10,19 +10,30 @@
   },
   "author": "lennyhuang",
   "license": "MIT",
+  "scripts": {
+    "dev": "cd gulp-task && gulp --target=debug --env=local --watch --minify"
+  },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.26.7",
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
+    "ejs": "^2.7.1",
+    "gulp": "^4.0.2",
+    "gulp-cache-bust": "^1.4.0",
     "gulp-concat": "^2.6.0",
+    "gulp-file-include": "^2.1.0",
     "gulp-header": "^1.8.2",
     "gulp-jshint": "^2.0.1",
-    "gulp-preprocess": "^2.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-rev": "^7.1.2",
+    "gulp-replace": "^1.0.0",
     "gulp-rev-collector": "^1.2.3",
-    "gulp-uglify": "^1.5.3",
     "jshint": "^2.9.3",
     "jshint-stylish": "^2.2.1",
-    "run-sequence": "^1.2.2"
-  }
+    "require-dir": "^1.0.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^4.41.2",
+    "webpack-stream": "^5.2.1"
+  },
+  "dependencies": {}
 }
