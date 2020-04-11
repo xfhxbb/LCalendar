@@ -93,6 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+
 window.LCalendar = (function() {
     var MobileCalendar = function() {
         this.gearDate;
@@ -599,7 +600,7 @@ window.LCalendar = (function() {
                         break;
                     }
                 }
-                clearInterval(target["int_" + target.id]);
+                cancelAnimationFrame(target["int_" + target.id]);
                 target["old_" + target.id] = e.targetTouches[0].screenY;
                 target["o_t_" + target.id] = (new Date()).getTime();
                 var top = target.getAttribute('top');
@@ -667,10 +668,10 @@ window.LCalendar = (function() {
                     stopGear = true;
                 }
                 var passY = _self.maxY - _self.minY + 1;
-                clearInterval(target["int_" + target.id]);
-                target["int_" + target.id] = setInterval(function() {
+                cancelAnimationFrame(target["int_" + target.id]);
+                var animate=function() {
                     if (!_self.gearDate) {
-                        clearInterval(target["int_" + target.id]);
+                        cancelAnimationFrame(target["int_" + target.id]);
                         return;
                     }
                     var pos = target["pos_" + target.id];
@@ -695,7 +696,7 @@ window.LCalendar = (function() {
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
                                 setGear(target, gearVal);
-                                clearInterval(target["int_" + target.id]);
+                                cancelAnimationFrame(target["int_" + target.id]);
                             }
                             break;
                         case "date_mm":
@@ -720,7 +721,7 @@ window.LCalendar = (function() {
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2 + minM;
                                 setGear(target, gearVal);
-                                clearInterval(target["int_" + target.id]);
+                                cancelAnimationFrame(target["int_" + target.id]);
                             }
                             break;
                         case "date_dd":
@@ -750,7 +751,7 @@ window.LCalendar = (function() {
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2 + minD;
                                 setGear(target, gearVal);
-                                clearInterval(target["int_" + target.id]);
+                                cancelAnimationFrame(target["int_" + target.id]);
                             }
                             break;
                         case "time_hh":
@@ -761,7 +762,7 @@ window.LCalendar = (function() {
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
                                 setGear(target, gearVal);
-                                clearInterval(target["int_" + target.id]);
+                                cancelAnimationFrame(target["int_" + target.id]);
                             }
                             break;
                         case "time_mm":
@@ -772,7 +773,7 @@ window.LCalendar = (function() {
                             if (stopGear) {
                                 var gearVal = Math.abs(pos - 8) / 2;
                                 setGear(target, gearVal);
-                                clearInterval(target["int_" + target.id]);
+                                cancelAnimationFrame(target["int_" + target.id]);
                             }
                             break;
                         default:
@@ -781,7 +782,11 @@ window.LCalendar = (function() {
                     target.style["-webkit-transform"] = 'translate3d(0,' + pos + 'em,0)';
                     target.setAttribute('top', pos + 'em');
                     d++;
-                }, 30);
+                    if(!stopGear){
+                        requestAnimationFrame(animate);
+                    }
+                };
+                target["int_" + target.id] = requestAnimationFrame(animate);
             }
             //控制插件滚动后停留的值
             function setGear(target, val) {
