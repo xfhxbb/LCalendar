@@ -54,7 +54,7 @@
             padding: 10px;
         }
     </style>
-    <link rel="stylesheet" href="../css/LCalendar.css?t=1586690415679">
+    <link rel="stylesheet" href="../css/LCalendar.css?t=1587645898179">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
             <input id="demo1" type="text" readonly="" placeholder="日期选择特效" data-lcalendar="2000-05-11,2055-05-11" />
         </div>
         <div>
-            <input id="demo2" type="text" readonly="" placeholder="日期和时间选择特效" value="2016-05-11 17:44" data-lcalendar="2000-05-11,2055-05-11" />
+            <input id="demo2" type="text" readonly="" placeholder="日期和时间选择特效" data-lcalendar="2000-05-11,2055-05-11" />
         </div>
         <div>
             <input id="demo3" type="text" readonly="" placeholder="时间选择特效" />
@@ -77,19 +77,21 @@
         </div> -->
     </div>
     <!--demo-content-->
-    <script src="../js/LCalendar.js?t=1586690415679"></script>
+    <script src="../js/LCalendar.js?t=1587645898179"></script>
     <script>
         var calendar = new LCalendar();
         calendar.init({
             'trigger': '#demo1', //标签id
             'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
-            'minDate': '2000-9-18', //最小日期
-            'maxDate': '2055-9-25' //最大日期
+            'minDate': '2018-5-18', //最小日期
+            'maxDate': '2020-2-25' //最大日期
         });
         var calendardatetime = new LCalendar();
         calendardatetime.init({
             'trigger': '#demo2',
-            'type': 'datetime'
+            'type': 'datetime',
+            'minDate': '2018-5-18', //最小日期
+            'maxDate': '2020-2-25' //最大日期
         });
         var calendartime = new LCalendar();
         calendartime.init({

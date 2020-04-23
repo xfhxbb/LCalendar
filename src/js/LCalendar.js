@@ -60,42 +60,64 @@ class MobileCalendar {
   defaultValueInit() {
     let date = new Date();
     let dateArr = {
-      yy: date.getFullYear(),
+      yy: -1,
       mm: date.getMonth(),
       dd: date.getDate() - 1,
       hh: date.getHours(),
       mi: date.getMinutes(),
     };
     if (/^\d{4}-\d{1,2}-\d{1,2}\s\d{2}:\d{2}$/.test(this.trigger.value)) {
-      let rs = this.trigger.value.match(/(^|-|\s|:)\d{1,4}/g);
-      dateArr.yy = rs[0] - this.minY;
-      dateArr.mm = rs[1].replace(/-/g, "") - 1;
-      dateArr.dd = rs[2].replace(/-/g, "") - 1;
-      dateArr.hh = parseInt(rs[3].replace(/\s0?/g, ""));
-      dateArr.mi = parseInt(rs[4].replace(/:0?/g, ""));
+      let [yy,mm,dd,hh,mi] = this.trigger.value.match(/(^|-|\s|:)\d{1,4}/g);
+      dateArr.yy = yy - this.minY;
+      dateArr.mm = mm.replace(/-/g, "") - 1;
+      dateArr.dd = dd.replace(/-/g, "") - 1;
+      dateArr.hh = ~~hh.replace(/\s0?/g, "");
+      dateArr.mi = ~~mi.replace(/:0?/g, "");
     }
     //初始化年月日插件默认值
     else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(this.trigger.value)) {
-      let rs = this.trigger.value.match(/(^|-)\d{1,4}/g);
-      dateArr.yy = rs[0] - this.minY;
-      dateArr.mm = rs[1].replace(/-/g, "") - 1;
-      dateArr.dd = rs[2].replace(/-/g, "") - 1;
+      const [yy,mm,dd] = this.trigger.value.match(/(^|-)\d{1,4}/g);
+      dateArr.yy = yy - this.minY;
+      dateArr.mm = mm.replace(/-/g, "") - 1;
+      dateArr.dd = dd.replace(/-/g, "") - 1;
     }
     //初始化年月插件默认值
     else if (/^\d{4}-\d{1,2}$/.test(this.trigger.value)) {
-      let rs = this.trigger.value.match(/(^|-)\d{1,4}/g);
-      dateArr.yy = rs[0] - this.minY;
-      dateArr.mm = rs[1].replace(/-/g, "") - 1;
+      let [yy,mm] = this.trigger.value.match(/(^|-)\d{1,4}/g);
+      dateArr.yy = yy - this.minY;
+      dateArr.mm = mm.replace(/-/g, "") - 1;
     }
     //初始化时分插件默认值
     else if (/^\d{2}:\d{2}$/.test(this.trigger.value)) {
-      let rs = this.trigger.value.match(/(^|:)\d{2}/g);
-      dateArr.hh = parseInt(rs[0].replace(/^0?/g, ""));
-      dateArr.mi = parseInt(rs[1].replace(/:0?/g, ""));
-    } else {
-      dateArr.yy = dateArr.yy - this.minY;
+      let [hh,mi] = this.trigger.value.match(/(^|:)\d{2}/g);
+      dateArr.hh = ~~hh.replace(/^0?/g, "");
+      dateArr.mi = ~~mi.replace(/:0?/g, "");
     }
     if (this.gearDate.querySelector(".date_yy")) {
+      if(dateArr.yy<0){
+        const nowY=date.getFullYear();
+        const minY =nowY - this.minY;
+        const maxY =nowY - this.maxY;
+        if(minY<=0){
+          dateArr.yy=0;
+          const minM=this.minM-1;
+          const minD=this.minD-1;
+          if(dateArr.mm<=minM){
+            dateArr.mm=minM;
+            dateArr.dd=minD;
+          }
+        }else if(maxY>=0){
+          dateArr.yy=minY;
+          const maxM=this.maxM-1;
+          const maxD=this.maxD-1;
+          if(dateArr.mm>=maxM){
+            dateArr.mm=maxM;
+            dateArr.dd=maxD;
+          }
+        }else{
+          dateArr.yy=minY;
+        }
+      }
       this.gearDate.querySelector(".date_yy").setAttribute("val", dateArr.yy);
       this.gearDate.querySelector(".date_mm").setAttribute("val", dateArr.mm);
       if (this.gearDate.querySelector(".date_dd")) {
@@ -175,7 +197,9 @@ class MobileCalendar {
       if (this.maxY < newY) {
         yyVal > gearVal && (yyVal = gearVal);
       } else if (this.minY > newY) {
-        yyVal < gearVal && (yyVal = gearVal);
+        if(yyVal > gearVal){
+          yyVal = gearVal
+        }
       }
       date_yy.style["-webkit-transform"] =
         "translate3d(0," + (8 - yyVal * 2) + "em,0)";
@@ -203,19 +227,10 @@ class MobileCalendar {
       itemStr += "<div class='tooth'>" + (minM + p + 1) + "</div>";
     }
     date_mm.innerHTML = itemStr;
-    top = Math.floor(parseFloat(date_mm.getAttribute("top")));
-    if (!isNaN(top)) {
-      if (mmVal > maxM) {
-        mmVal = maxM;
-      } else if (mmVal < minM) {
-        mmVal = maxM;
-      }
-    } else {
-      if (mmVal > maxM || (this.maxY < newY && !this.trigger.value)) {
-        mmVal = maxM;
-      } else if (mmVal < minM || (this.minY > newY && !this.trigger.value)) {
-        mmVal = maxM;
-      }
+    if (mmVal > maxM) {
+      mmVal = maxM;
+    } else if (mmVal <= minM) {
+      mmVal = minM;
     }
     date_mm.setAttribute("val", mmVal);
     date_mm.style["-webkit-transform"] =
@@ -234,29 +249,21 @@ class MobileCalendar {
       //当年份月份到达最大值
       if (yyVal == passY - 1 && this.maxM == mmVal + 1) {
         maxD = this.maxD - 1;
+        if (ddVal > maxD) {
+          ddVal = maxD;
+        }
       }
       //当年、月到达最小值
       if (yyVal == 0 && this.minM == mmVal + 1) {
         minD = this.minD - 1;
+        if (ddVal <= minD) {
+          ddVal = minD;
+        }
       }
       for (let p = 0; p < maxD - minD + 1; p++) {
         itemStr += "<div class='tooth'>" + (minD + p + 1) + "</div>";
       }
       date_dd.innerHTML = itemStr;
-      let top = Math.floor(parseFloat(date_dd.getAttribute("top")));
-      if (!isNaN(top)) {
-        if (ddVal > maxD) {
-          ddVal = maxD;
-        } else if (ddVal < minD) {
-          ddVal = minD;
-        }
-      } else {
-        if (ddVal > maxD || (this.maxY < newY && !this.trigger.value)) {
-          ddVal = maxD;
-        } else if (ddVal < minD || (this.minY > newY && !this.trigger.value)) {
-          ddVal = maxD;
-        }
-      }
       date_dd.setAttribute("val", ddVal);
       date_dd.style["-webkit-transform"] =
         "translate3d(0," + (8 - (ddVal - minD) * 2) + "em,0)";
