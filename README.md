@@ -1,5 +1,6 @@
-LCalendar v2.1.0移动端日期时间选择控件
+LCalendar2.1.1 移动端日期时间选择控件
 ==========
+在线预览：https://xfhxbb.github.io/LCalendar/public/html/index.html
 纯原生js的移动端日期插件，不依赖任何库，体积非常小只有10k
 ##用法
 在html页面中引入input标签，通过自定义属性`data-lcalendar`控制最小日期和最大日期，写法如下：
@@ -33,5 +34,3 @@ calendar.init({
 ...
 ```
 调用起来非常简单，代码我后续会持续优化，如果喜欢希望赏颗星哦。
-
-在线预览：https://xfhxbb.github.io/LCalendar/public/html/index.html
