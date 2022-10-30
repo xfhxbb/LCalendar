@@ -16,7 +16,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.27.10",
     "del": "^2.2.2",
     "ejs": "^2.7.1",
     "gulp": "^4.0.2",
